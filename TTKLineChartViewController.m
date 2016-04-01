@@ -85,6 +85,7 @@
     self.stockSearchController.hidesNavigationBarDuringPresentation = NO;
     self.stockSearchController.dimsBackgroundDuringPresentation = YES;
     self.stockSearchController.searchResultsUpdater = searchResultTVC;
+    self.stockSearchController.searchBar.placeholder = @"股票名称,代码或拼音简称";
 
 }
 
