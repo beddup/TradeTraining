@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="bEK-9d-6JA">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--Line Chart View Controller-->
+        <scene sceneID="tne-QT-ifu">
+            <objects>
+                <viewController id="BYZ-38-t0r" customClass="TTKLineChartViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
+                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
+                        <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="grt-gX-CUN" customClass="TTTrainingKLineChart">
+                                <rect key="frame" x="12" y="38" width="576" height="446"/>
+                                <animations/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oaF-Cp-1Pz">
+                                <rect key="frame" x="12" y="8" width="50" height="30"/>
+                                <animations/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="50" id="g1O-yY-HmN"/>
+                                </constraints>
+                                <state key="normal" title="日线"/>
+                                <connections>
+                                    <action selector="showDayKLine:" destination="BYZ-38-t0r" eventType="touchUpInside" id="BgC-4E-TsM"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="axI-wO-Pkt">
+                                <rect key="frame" x="70" y="8" width="50" height="30"/>
+                                <animations/>
+                                <state key="normal" title="周线"/>
+                                <connections>
+                                    <action selector="showWeekKLine:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Z1M-Mh-74v"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dkn-ei-wzT">
+                                <rect key="frame" x="128" y="8" width="50" height="30"/>
+                                <animations/>
+                                <state key="normal" title="月线"/>
+                                <connections>
+                                    <action selector="showMonthKLine:" destination="BYZ-38-t0r" eventType="touchUpInside" id="P1d-O1-P0T"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="dkn-ei-wzT" firstAttribute="leading" secondItem="axI-wO-Pkt" secondAttribute="trailing" constant="8" id="2D0-Db-Bjl"/>
+                            <constraint firstItem="dkn-ei-wzT" firstAttribute="width" secondItem="axI-wO-Pkt" secondAttribute="width" id="6X4-89-ncl"/>
+                            <constraint firstItem="axI-wO-Pkt" firstAttribute="top" secondItem="oaF-Cp-1Pz" secondAttribute="top" id="CVx-bw-aiX"/>
+                            <constraint firstItem="grt-gX-CUN" firstAttribute="top" secondItem="oaF-Cp-1Pz" secondAttribute="bottom" id="Cfl-Uf-hC2"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="grt-gX-CUN" secondAttribute="trailing" constant="-8" id="HV9-51-ln1"/>
+                            <constraint firstItem="oaF-Cp-1Pz" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="Spm-X2-gne"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="grt-gX-CUN" secondAttribute="bottom" constant="8" id="UBv-P7-Cxb"/>
+                            <constraint firstItem="dkn-ei-wzT" firstAttribute="top" secondItem="axI-wO-Pkt" secondAttribute="top" id="Zg1-3G-uXc"/>
+                            <constraint firstItem="dkn-ei-wzT" firstAttribute="baseline" secondItem="axI-wO-Pkt" secondAttribute="baseline" id="c1K-6g-Ael"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="oaF-Cp-1Pz" secondAttribute="leading" constant="8" id="eQK-QX-J2k"/>
+                            <constraint firstItem="grt-gX-CUN" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-8" id="fns-Ts-6Lg"/>
+                            <constraint firstItem="axI-wO-Pkt" firstAttribute="width" secondItem="oaF-Cp-1Pz" secondAttribute="width" id="gwp-hK-ZH8"/>
+                            <constraint firstItem="axI-wO-Pkt" firstAttribute="baseline" secondItem="oaF-Cp-1Pz" secondAttribute="baseline" id="kCT-aw-X4U"/>
+                            <constraint firstItem="axI-wO-Pkt" firstAttribute="leading" secondItem="oaF-Cp-1Pz" secondAttribute="trailing" constant="8" id="zjt-l6-E5P"/>
+                        </constraints>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
+                    <toolbarItems>
+                        <barButtonItem title="买入" id="Jm7-Nu-3S7">
+                            <connections>
+                                <action selector="buy:" destination="BYZ-38-t0r" id="N59-kK-Ajc"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="LmT-HD-hTC"/>
+                        <barButtonItem title="卖出" id="sig-mZ-o7t">
+                            <connections>
+                                <action selector="sell:" destination="BYZ-38-t0r" id="Esb-qk-v3a"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="Aqr-uf-BTE"/>
+                        <barButtonItem title="下一交易日" id="UCK-fo-g7n">
+                            <connections>
+                                <action selector="showNextRecord:" destination="BYZ-38-t0r" id="ncy-Ta-hq2"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" id="IUS-5F-fXZ"/>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="dayK" destination="oaF-Cp-1Pz" id="OTn-yM-Wq1"/>
+                        <outlet property="kLineChart" destination="grt-gX-CUN" id="4YS-D1-rfL"/>
+                        <outlet property="monthK" destination="dkn-ei-wzT" id="5cs-jM-1ur"/>
+                        <outlet property="weekK" destination="axI-wO-Pkt" id="jZc-a9-4eO"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1341" y="99"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="gm9-vm-uRQ">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="bEK-9d-6JA" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="CO7-Us-3Qa">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="ACH-ct-MoB"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jIq-ns-j1R" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="399" y="79"/>
+        </scene>
+    </scenes>
+</document>

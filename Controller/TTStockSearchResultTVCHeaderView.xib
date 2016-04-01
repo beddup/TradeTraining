@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB">
+            <rect key="frame" x="0.0" y="0.0" width="333" height="57"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="股票名称" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2ko-ay-sBK">
+                    <rect key="frame" x="132" y="0.0" width="68" height="57"/>
+                    <animations/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="拼音简称" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2SP-yZ-rgw">
+                    <rect key="frame" x="257" y="0.0" width="68" height="57"/>
+                    <animations/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="股票代码" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DlM-DR-CvX">
+                    <rect key="frame" x="8" y="0.0" width="68" height="57"/>
+                    <animations/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <animations/>
+            <color key="backgroundColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="2SP-yZ-rgw" secondAttribute="trailing" constant="8" id="0Ot-jl-4fe"/>
+                <constraint firstItem="2ko-ay-sBK" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="43U-bR-6DD"/>
+                <constraint firstAttribute="bottom" secondItem="2SP-yZ-rgw" secondAttribute="bottom" id="5rF-Da-YLQ"/>
+                <constraint firstItem="2ko-ay-sBK" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="GU1-Oo-s6D"/>
+                <constraint firstItem="2SP-yZ-rgw" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="LGk-Bv-v5X"/>
+                <constraint firstItem="DlM-DR-CvX" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="fID-l6-vr6"/>
+                <constraint firstAttribute="bottom" secondItem="2ko-ay-sBK" secondAttribute="bottom" id="jv8-vJ-E9g"/>
+                <constraint firstItem="2ko-ay-sBK" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="nZj-0k-El3"/>
+                <constraint firstAttribute="bottom" secondItem="DlM-DR-CvX" secondAttribute="bottom" id="ny0-ts-MBW"/>
+                <constraint firstItem="DlM-DR-CvX" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="8" id="sVU-A5-3lM"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <point key="canvasLocation" x="283.5" y="195.5"/>
+        </view>
+    </objects>
+</document>
