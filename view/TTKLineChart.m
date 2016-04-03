@@ -10,6 +10,8 @@
 #import "TTKLineRecordsManager.h"
 #import "NSDate+Extension.h"
 #import "TTDefines.h"
+#import "TTRecordInfoView.h"
+#import "TTKLineChartFrameView.h"
 
 @interface TTKLineChart()
 
@@ -38,7 +40,6 @@
 @property(strong,nonatomic) UIColor* focusedCrossLineColor;
 @property(strong,nonatomic) UIColor* dateColor;
 
-
 // paragraph stye
 @property(strong,nonatomic)NSMutableParagraphStyle* alignmentCenter;
 @property(strong,nonatomic)NSMutableParagraphStyle* alignmentRight;
@@ -50,10 +51,24 @@
 
 
 // the record where long pressed happened;
+@property(weak, nonatomic) TTRecordInfoView* recordInfoView;
 @property(strong, nonatomic) TTKLineRecord* focusedRecord;
 @property(strong, nonatomic) UILongPressGestureRecognizer* longPressGesture;
+@property(strong, nonatomic) UIBezierPath* crossLine;
+
+@property(weak, nonatomic)UILabel* maDisplayLabel;
 
 @property(weak, nonatomic) UIActivityIndicatorView* fetchDateIndicator;
+@property(weak, nonatomic) TTKLineChartFrameView* frameView;
+
+// ma line
+@property(strong,nonatomic)UIBezierPath* ma5;
+@property(strong,nonatomic)UIBezierPath* ma10;
+@property(strong,nonatomic)UIBezierPath* ma20;
+
+// date line
+
+@property(strong,nonatomic)UIBezierPath* dateLine;
 
 @end
 
@@ -70,21 +85,6 @@
         self.records = nil;
         [self getMoreKLineRecords];
     }
-
-}
-
--(void)setKWidth:(CGFloat)KWidth{
-    if (_KWidth != KWidth) {
-        _KWidth = KWidth;
-        [self setNeedsDisplay];
-    }
-}
-
--(void)setKInterSpace:(CGFloat)KInterSpace{
-    if (_KInterSpace != KInterSpace) {
-        _KInterSpace = KInterSpace;
-        [self setNeedsDisplay];
-    }
 }
 
 -(void)setLastVisibleKLineX:(CGFloat)lastVisibleKLineX{
@@ -92,13 +92,22 @@
     if (_lastVisibleKLineX != lastVisibleKLineX) {
         _lastVisibleKLineX = lastVisibleKLineX;
         [self calculateMaxPriceAndMaxVolumn];
-        [self setNeedsDisplay];
+        if (self.records.count) {
+            [self setNeedsDisplay];
+        }
     }
 }
 
 -(void)setFocusedRecord:(TTKLineRecord *)focusedRecord{
     if (![focusedRecord.date isSameDay:_focusedRecord.date]) {
         _focusedRecord = focusedRecord;
+        [self updateMAInfo];
+        self.recordInfoView.hidden = (focusedRecord == nil);
+        if (focusedRecord) {
+            self.recordInfoView.showDate = self.showDate;
+            self.recordInfoView.record = self.focusedRecord;
+        }
+        [self updateFocusedRecordInfo];
         [self setNeedsDisplay];
     }
 }
@@ -113,7 +122,11 @@
     self.lastVisibleRecordIndex = 0;
     [self calculateMaxPriceAndMaxVolumn];
 
-    [self setNeedsDisplay];
+    [self updateMAInfo];
+
+    if (self.records.count) {
+        [self setNeedsDisplay];
+    }
 
 }
 
@@ -170,10 +183,11 @@
 #pragma mark - CalcutionForDrawing
 -(void)calculateMaxPriceAndMaxVolumn{
 
-    // calculate the axisMaxPrice and axisMinPrice and maxVolumn, according to current visible records
     if(!self.records.count) {
         return;
     }
+
+
     NSInteger recordIndex = self.lastVisibleRecordIndex;
     CGFloat x = self.lastVisibleKLineX;
 
@@ -181,6 +195,7 @@
     CGFloat minPrice = ((TTKLineRecord*)self.records[0]).minPrice;
     CGFloat maxVolumn = 0;
 
+    // calculate the axisMaxPrice and axisMinPrice and maxVolumn, according to current visible records
     while ( x > - self.KWidth ) {
 
             TTKLineRecord * record = self.records[recordIndex];
@@ -208,194 +223,123 @@
     self.maxVolumn = maxVolumn * 1.1;
     self.heightAndPriceAspect = self.kLineAreaHeight / (self.axisMaxPrice - self.axisMinPrice);
 
+    // calculate ma line and k line
+    [self.ma5 removeAllPoints];
+    [self.ma10 removeAllPoints];
+    [self.ma20 removeAllPoints];
+
+    recordIndex = self.lastVisibleRecordIndex;
+     x = self.lastVisibleKLineX;
+
+    while ( x > - self.KWidth ) {
+        TTKLineRecord * record = self.records[recordIndex];
+
+        if (record.MA5 > 0) {
+            if (recordIndex == self.lastVisibleRecordIndex) {
+                [self.ma5 moveToPoint:CGPointMake(x + self.KWidth / 2, (self.axisMaxPrice - record.MA5) * self.heightAndPriceAspect)];
+            }
+            [self.ma5 addLineToPoint:CGPointMake(x + self.KWidth / 2, (self.axisMaxPrice - record.MA5) * self.heightAndPriceAspect)];
+        }
+        if (record.MA10 > 0) {
+            if (recordIndex == self.lastVisibleRecordIndex) {
+                [self.ma10 moveToPoint:CGPointMake(x + self.KWidth / 2, (self.axisMaxPrice - record.MA10) * self.heightAndPriceAspect)];
+            }
+            [self.ma10 addLineToPoint:CGPointMake(x + self.KWidth / 2, (self.axisMaxPrice - record.MA10) * self.heightAndPriceAspect)];
+        }
+        if (record.MA20 > 0) {
+            if (recordIndex == self.lastVisibleRecordIndex) {
+                [self.ma20 moveToPoint:CGPointMake(x + self.KWidth / 2, (self.axisMaxPrice - record.MA20) * self.heightAndPriceAspect)];
+            }
+            [self.ma20 addLineToPoint:CGPointMake(x +self.KWidth / 2, (self.axisMaxPrice - record.MA20) * self.heightAndPriceAspect)];
+        }
+
+        x -= self.KInterSpace + self.KWidth;
+        recordIndex += 1;
+    }
+
 }
 
 #pragma mark - Draw
 static CGFloat KlineAreaHeightRatio = 0.8;
 static CGFloat KlineAndVolumSpace = 15.0;
 static NSInteger AxisPriceZoneCount = 4;
-static CGFloat RecordInfoDisplayWidth = 100;
+static CGFloat RecordInfoDisplayWidth = 140;
+static CGFloat RecordInfoDisplayHeight = 160;
+
 static CGFloat MADisplayZoneHeight = 25;
 
--(void)drawChartFrame{
+-(void)drawReferencePrice{
 
-    // draw k line area frame
-    UIBezierPath * kLineFrame = [UIBezierPath bezierPathWithRect:CGRectMake(0, 0, CGRectGetWidth(self.bounds), self.kLineAreaHeight)];
-    kLineFrame.lineWidth = 0.5;
-    [self.chartFrameColor setStroke];
-    [kLineFrame stroke];
-
-    // draw k line reference line and price
-    UIBezierPath * referenceLine = [UIBezierPath bezierPath];
-    referenceLine.lineWidth = 0.5;
-    CGFloat lineDash[] = {3,2}  ;
-    [referenceLine setLineDash:lineDash count:1 phase:1];
     for (NSInteger index = 1; index < AxisPriceZoneCount; index++) {
         CGFloat referenceLineY = self.kLineAreaHeight / AxisPriceZoneCount * index;
-        [referenceLine moveToPoint:CGPointMake(0,  referenceLineY)];
-        [referenceLine addLineToPoint:CGPointMake(CGRectGetWidth(self.bounds), referenceLineY)];
         NSString* price = [NSString stringWithFormat:@"%.2f",self.axisMaxPrice - (self.axisMaxPrice - self.axisMinPrice) / AxisPriceZoneCount * index];
         [price drawAtPoint:CGPointMake(1, referenceLineY - 15) withAttributes:@{NSForegroundColorAttributeName : self.referencePriceColor}];
 
     }
-    [self.referencePriceLineColor setStroke];
-    [referenceLine stroke];
-
-    // draw volumn Frame
-    UIBezierPath* volumnFrame = [UIBezierPath bezierPathWithRect:CGRectMake(0, self.kLineAreaHeight + KlineAndVolumSpace, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds) - self.kLineAreaHeight - KlineAndVolumSpace)];
-    volumnFrame.lineWidth = 0.5;
-    [volumnFrame stroke];
-
 }
--(void)drawFocusedRecordCrossLine{
 
-    if (self.focusedRecord) {
-
+-(void)updateFocusedRecordInfo{
+        if (!self.focusedRecord) {
+            return;
+        }
         CGFloat locationX = [self.longPressGesture locationInView:self].x;
         NSInteger offset =(NSInteger)((self.lastVisibleKLineX + self.KWidth / 2 - locationX) / (self.KWidth + self.KInterSpace) + 0.5);
         CGFloat adjustedX = (self.lastVisibleKLineX + self.KWidth / 2) - offset * (self.KWidth + self.KInterSpace);
 
-        UIBezierPath* crossLine = [UIBezierPath bezierPath];
-        [crossLine moveToPoint:CGPointMake(adjustedX, 0)];
-        [crossLine addLineToPoint:CGPointMake(adjustedX, self.kLineAreaHeight)];
-
+        [self.crossLine removeAllPoints];
+        [self.crossLine moveToPoint:CGPointMake(adjustedX, 0)];
+        [self.crossLine addLineToPoint:CGPointMake(adjustedX, self.kLineAreaHeight)];
         CGFloat locationY = (self.axisMaxPrice - self.focusedRecord.closePrice) * self.heightAndPriceAspect;
-        [crossLine moveToPoint:CGPointMake(0, locationY)];
-        [crossLine addLineToPoint:CGPointMake(CGRectGetWidth(self.bounds), locationY)];
-        [self.focusedCrossLineColor setStroke];
-        [crossLine stroke];
-    }
-}
--(void)drawFocuesdRecordInfo{
-    // draw focused record info
-    if (self.focusedRecord) {
+        [self.crossLine moveToPoint:CGPointMake(0, locationY)];
+        [self.crossLine addLineToPoint:CGPointMake(CGRectGetWidth(self.bounds), locationY)];
 
-        CGFloat locationX = [self.longPressGesture locationInView:self].x;
-        CGFloat focusedFrameX = 0;
         if (locationX > CGRectGetMidX(self.bounds)) {
-            focusedFrameX = 0;
-        }else{
-            focusedFrameX = CGRectGetMaxX(self.bounds) - RecordInfoDisplayWidth;
+            self.recordInfoView.frame = CGRectMake(0, MADisplayZoneHeight,RecordInfoDisplayWidth,RecordInfoDisplayHeight);
         }
-        UIBezierPath* focusedFrame = [UIBezierPath bezierPathWithRect:CGRectMake(focusedFrameX, MADisplayZoneHeight, RecordInfoDisplayWidth, self.kLineAreaHeight - MADisplayZoneHeight)];
-        [[[UIColor whiteColor] colorWithAlphaComponent:0.9] setFill];
-        [self.chartFrameColor setStroke];
-        [focusedFrame stroke];
-        [focusedFrame fill];
-
-        // draw record Info
-
-        CGFloat drawHeight = (self.kLineAreaHeight - MADisplayZoneHeight) / 8;
-        if (self.showDate) {
-            [[self.focusedRecord.date stringWithFormat:[NSDate ymdFormat]] drawWithRect:CGRectMake(focusedFrameX, MADisplayZoneHeight, RecordInfoDisplayWidth, drawHeight) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSParagraphStyleAttributeName:self.alignmentCenter} context:nil];
+        else{
+            self.recordInfoView.frame = CGRectMake(CGRectGetMaxX(self.bounds) - RecordInfoDisplayWidth, MADisplayZoneHeight,RecordInfoDisplayWidth,RecordInfoDisplayHeight);
         }
-        UIColor* displayColor = nil;
 
-        displayColor = self.focusedRecord.openPrice > self.focusedRecord.previousClosePrice ? self.klineIncreaseColor : (self.focusedRecord.openPrice < self.focusedRecord.previousClosePrice ? self.klineDecreaseColor : self.klineNotChangeColor);
-        [@"开盘价" drawAtPoint: CGPointMake(focusedFrameX + 2, MADisplayZoneHeight + drawHeight) withAttributes:nil];
-        [[NSString stringWithFormat:@"%.2f ",self.focusedRecord.openPrice] drawWithRect:CGRectMake(focusedFrameX - 2, MADisplayZoneHeight + drawHeight * 1, RecordInfoDisplayWidth, drawHeight) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSParagraphStyleAttributeName:self.alignmentRight,NSForegroundColorAttributeName:displayColor} context:nil];;
-
-        displayColor = self.focusedRecord.maxPrice > self.focusedRecord.previousClosePrice ? self.klineIncreaseColor : (self.focusedRecord.maxPrice < self.focusedRecord.previousClosePrice ? self.klineDecreaseColor : self.klineNotChangeColor);
-        [@"最高价" drawAtPoint: CGPointMake(focusedFrameX + 2, MADisplayZoneHeight + drawHeight * 2) withAttributes:nil];
-        [[NSString stringWithFormat:@"%.2f ",self.focusedRecord.maxPrice] drawWithRect:CGRectMake(focusedFrameX - 2, MADisplayZoneHeight + drawHeight * 2, RecordInfoDisplayWidth, drawHeight) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSParagraphStyleAttributeName:self.alignmentRight,NSForegroundColorAttributeName:displayColor} context:nil];;
-
-        displayColor = self.focusedRecord.minPrice > self.focusedRecord.previousClosePrice ? self.klineIncreaseColor : (self.focusedRecord.minPrice < self.focusedRecord.previousClosePrice ? self.klineDecreaseColor : self.klineNotChangeColor);
-        [@"最低价" drawAtPoint: CGPointMake(focusedFrameX + 2, MADisplayZoneHeight + drawHeight * 3) withAttributes:nil];
-        [[NSString stringWithFormat:@"%.2f ",self.focusedRecord.minPrice] drawWithRect:CGRectMake(focusedFrameX - 2, MADisplayZoneHeight + drawHeight * 3, RecordInfoDisplayWidth, drawHeight) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSParagraphStyleAttributeName:self.alignmentRight,NSForegroundColorAttributeName:displayColor} context:nil];;
-
-        displayColor = self.focusedRecord.closePrice > self.focusedRecord.previousClosePrice ? self.klineIncreaseColor : (self.focusedRecord.closePrice < self.focusedRecord.previousClosePrice ? self.klineDecreaseColor : self.klineNotChangeColor);
-        [@"收盘价" drawAtPoint: CGPointMake(focusedFrameX + 2, MADisplayZoneHeight + drawHeight * 4) withAttributes:nil];
-        [[NSString stringWithFormat:@"%.2f ",self.focusedRecord.closePrice] drawWithRect:CGRectMake(focusedFrameX - 2, MADisplayZoneHeight + drawHeight * 4, RecordInfoDisplayWidth, drawHeight) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSParagraphStyleAttributeName:self.alignmentRight,NSForegroundColorAttributeName:displayColor} context:nil];;
-
-
-        [@"涨跌额" drawAtPoint: CGPointMake(focusedFrameX + 2, MADisplayZoneHeight + drawHeight * 5) withAttributes:nil];
-        [[NSString stringWithFormat:@"%.2f ",self.focusedRecord.closePrice - self.focusedRecord.previousClosePrice] drawWithRect:CGRectMake(focusedFrameX - 2, MADisplayZoneHeight + drawHeight * 5, RecordInfoDisplayWidth, drawHeight) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSParagraphStyleAttributeName:self.alignmentRight,NSForegroundColorAttributeName:displayColor} context:nil];;
-
-        [@"涨跌幅" drawAtPoint: CGPointMake(focusedFrameX + 2, MADisplayZoneHeight + drawHeight * 6) withAttributes:nil];
-        [[NSString stringWithFormat:@"%.2f%% ",(self.focusedRecord.closePrice - self.focusedRecord.previousClosePrice) / self.focusedRecord.previousClosePrice * 100 ] drawWithRect:CGRectMake(focusedFrameX - 2 , MADisplayZoneHeight + drawHeight * 6, RecordInfoDisplayWidth, drawHeight) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSParagraphStyleAttributeName:self.alignmentRight,NSForegroundColorAttributeName:displayColor} context:nil];;
-
-        [@"成交量" drawAtPoint: CGPointMake(focusedFrameX + 2, MADisplayZoneHeight + drawHeight * 7) withAttributes:nil];
-        [[NSString stringWithFormat:@"%.2f百万 ",self.focusedRecord.volumn * 1.0 / 1000] drawWithRect:CGRectMake(focusedFrameX - 2, MADisplayZoneHeight + drawHeight * 7, RecordInfoDisplayWidth, drawHeight) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSParagraphStyleAttributeName:self.alignmentRight} context:nil];;
-    }
 }
 
--(void)drawMAInfo{
+
+-(void)updateMAInfo{
     // draw ma string
     TTKLineRecord* record = self.focusedRecord  ? self.focusedRecord : [self.records firstObject];
 
     NSMutableAttributedString* maString = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"MA5: %.2f   ",record.MA5] attributes:@{NSForegroundColorAttributeName:self.MA5Color}];
     [maString appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"MA10: %.2f   ",record.MA10] attributes:@{NSForegroundColorAttributeName:self.MA10Color}]];
     [maString appendAttributedString:[[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"MA20: %.2f   ",record.MA20] attributes:@{NSForegroundColorAttributeName:self.MA20Color}]];
-    [maString drawInRect:CGRectMake(0, 0, CGRectGetWidth(self.bounds), MADisplayZoneHeight)];
+    [self.maDisplayLabel setAttributedText:maString];
 }
 
 -(void)drawMALine{
 
-    UIBezierPath* ma5 = [UIBezierPath bezierPath];
-    ma5.lineWidth = 0.5;
-    ma5.lineJoinStyle = kCGLineJoinBevel;
-    UIBezierPath* ma10 = [UIBezierPath bezierPath];
-    ma10.lineWidth = 0.5;
-    ma10.lineJoinStyle = kCGLineJoinBevel;
+    // draw ma line
+    [self.MA5Color setStroke];
+    [self.ma5 stroke];
+    [self.MA10Color setStroke];
+    [self.ma10 stroke];
+    [self.MA20Color setStroke];
+    [self.ma20 stroke];
 
-    UIBezierPath* ma20 = [UIBezierPath bezierPath];
-    ma20.lineWidth = 0.5;
-    ma20.lineJoinStyle = kCGLineJoinBevel;
-    
-    CGFloat x = self.lastVisibleKLineX;
-    NSInteger recordIndex = self.lastVisibleRecordIndex;
-
-    while (x > -self.KWidth) {
-
-        if (recordIndex >= self.records.count) {
-            return;
-        }
-        TTKLineRecord * record = self.records[recordIndex];
-
-        if (record.MA5 > 0) {
-            if (recordIndex == self.lastVisibleRecordIndex) {
-                [ma5 moveToPoint:CGPointMake(x + self.KWidth / 2, (self.axisMaxPrice - record.MA5) * self.heightAndPriceAspect)];
-            }
-            [ma5 addLineToPoint:CGPointMake(x + self.KWidth / 2, (self.axisMaxPrice - record.MA5) * self.heightAndPriceAspect)];
-        }
-        if (record.MA10 > 0) {
-            if (recordIndex == self.lastVisibleRecordIndex) {
-                [ma10 moveToPoint:CGPointMake(x + self.KWidth / 2, (self.axisMaxPrice - record.MA10) * self.heightAndPriceAspect)];
-            }
-            [ma10 addLineToPoint:CGPointMake(x + self.KWidth / 2, (self.axisMaxPrice - record.MA10) * self.heightAndPriceAspect)];
-        }
-        if (record.MA20 > 0) {
-            if (recordIndex == self.lastVisibleRecordIndex) {
-                [ma20 moveToPoint:CGPointMake(x + self.KWidth / 2, (self.axisMaxPrice - record.MA20) * self.heightAndPriceAspect)];
-            }
-            [ma20 addLineToPoint:CGPointMake(x +self.KWidth / 2, (self.axisMaxPrice - record.MA20) * self.heightAndPriceAspect)];
-        }
-        [self.MA5Color setStroke];
-        [ma5 stroke];
-        [self.MA10Color setStroke];
-        [ma10 stroke];
-        [self.MA20Color setStroke];
-        [ma20 stroke];
-
-        x -= self.KInterSpace + self.KWidth;
-        recordIndex += 1;
-
-    }
 }
 
 - (void)drawRect:(CGRect)rect {
 
-    if (!self.records.count) {
-        return;
-    }
-
-    [self drawChartFrame];
+    [self drawReferencePrice];
     [self drawMALine];
-    [self drawFocusedRecordCrossLine];
+
+    // draw focused cross line
+    if (self.focusedRecord) {
+        [self.focusedCrossLineColor setStroke];
+        [self.crossLine stroke];
+    }
 
     // draw K line and volumn
     CGFloat x = self.lastVisibleKLineX;
     NSInteger recordIndex = self.lastVisibleRecordIndex;
+    [self.dateLine removeAllPoints];
     while (x > -self.KWidth) {
 
         if (recordIndex >= self.records.count) {
@@ -409,7 +353,7 @@ static CGFloat MADisplayZoneHeight = 25;
         CGFloat closeY = (self.axisMaxPrice - record.closePrice) * self.heightAndPriceAspect;
         CGFloat minY = (self.axisMaxPrice - record.minPrice) * self.heightAndPriceAspect;
 
-        UIBezierPath* path = [UIBezierPath bezierPathWithRect:CGRectMake(x, openY < closeY ? openY : closeY , self.KWidth, fabsf(openY - closeY))];
+        UIBezierPath* path = [UIBezierPath bezierPathWithRect:CGRectMake(x, openY < closeY ? openY : closeY , self.KWidth, fabs(openY - closeY))];
         [path moveToPoint:CGPointMake(x + self.KWidth / 2, maxY)];
         [path addLineToPoint:CGPointMake(x + self.KWidth / 2, minY)];
 
@@ -436,17 +380,17 @@ static CGFloat MADisplayZoneHeight = 25;
             NSString* dateString = nil;
             if ([self.kLineType isEqualToString:TTKlineTypeDay]){
                 if ([previousRecordDate month] != [theDate month] || [previousRecordDate year] != [theDate year]) {
-                    dateString = [NSString stringWithFormat:@"%d-%d",[previousRecordDate year],[previousRecordDate month]];;
+                    dateString = [NSString stringWithFormat:@"%lu-%lu",(unsigned long)[previousRecordDate year],(unsigned long)[previousRecordDate month]];;
                 }
             }else if ([self.kLineType isEqualToString:TTKlineTypeWeek]){
                 if ([previousRecordDate year] != [theDate year]) {
-                    dateString = [NSString stringWithFormat:@"%d-%d",[previousRecordDate year],[previousRecordDate month]];;
+                    dateString = [NSString stringWithFormat:@"%lu-%lu",(unsigned long)[previousRecordDate year],(unsigned long)[previousRecordDate month]];;
                 }else if([previousRecordDate month] != [theDate month]){
-                    dateString = [NSString stringWithFormat:@"%d",[previousRecordDate month]];;
+                    dateString = [NSString stringWithFormat:@"%lu",(unsigned long)[previousRecordDate month]];;
                 }
             }else {
                 if ([previousRecordDate year] != [theDate year]) {
-                    dateString = [NSString stringWithFormat:@"%d",[previousRecordDate year]];;
+                    dateString = [NSString stringWithFormat:@"%lu",(unsigned long)[previousRecordDate year]];;
                 }
             }
             if (dateString) {
@@ -454,23 +398,20 @@ static CGFloat MADisplayZoneHeight = 25;
                 [dateString drawWithRect:CGRectMake(x + self.KWidth / 2 + self.KWidth + self.KInterSpace - 50, self.kLineAreaHeight, 100, KlineAndVolumSpace) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSForegroundColorAttributeName:self.dateColor,NSParagraphStyleAttributeName : self.alignmentCenter } context:nil];
 
                 // draw date line
-                UIBezierPath* dateLine = [UIBezierPath bezierPath];
-                [dateLine moveToPoint:CGPointMake(x + self.KWidth / 2 + self.KWidth + self.KInterSpace , self.kLineAreaHeight)];
-                [dateLine addLineToPoint:CGPointMake(x + self.KWidth / 2 + self.KWidth + self.KInterSpace, self.kLineAreaHeight - 5)];
-                [self.chartFrameColor setStroke];
-                dateLine.lineWidth = 0.5;
-                [dateLine stroke];
+                [self.dateLine moveToPoint:CGPointMake(x + self.KWidth / 2 + self.KWidth + self.KInterSpace , self.kLineAreaHeight)];
+                [self.dateLine addLineToPoint:CGPointMake(x + self.KWidth / 2 + self.KWidth + self.KInterSpace, self.kLineAreaHeight - 5)];
             }
         }
-        
+//
         x -= self.KInterSpace + self.KWidth;
         recordIndex += 1;
     }
 
-    [self drawFocuesdRecordInfo];
-    [self drawMAInfo];
+    [self.chartFrameColor setStroke];
+    [self.dateLine stroke];
 
 }
+
 
 #pragma mark - Gestures;
 -(void)pinch:(UIPinchGestureRecognizer* )pinchGesture{
@@ -527,8 +468,12 @@ static CGFloat MADisplayZoneHeight = 25;
 
 }
 
+
 -(void)longPress:(UILongPressGestureRecognizer*)longPress{
 
+    if (!self.records.count) {
+        return;
+    }
 
     if (longPress.state  == UIGestureRecognizerStateBegan ||
         longPress.state  == UIGestureRecognizerStateChanged) {
@@ -557,6 +502,8 @@ static CGFloat MADisplayZoneHeight = 25;
     self.maxVolumHegiht = CGRectGetHeight(self.bounds) * (1 - KlineAreaHeightRatio) - KlineAndVolumSpace;
     self.fetchDateIndicator.center = self.center;
 
+    self.frameView.frame = self.bounds;
+
     if (self.lastVisibleKLineX == -5201314 ) {
         // initail position
         _lastVisibleKLineX = CGRectGetWidth(self.bounds) * 2 / 3;
@@ -572,7 +519,7 @@ static CGFloat MADisplayZoneHeight = 25;
 -(void)setup{
 
 
-    self.backgroundColor = [UIColor whiteColor];
+    self.backgroundColor = [UIColor clearColor];
 
     self.axisMaxPrice = 0;
     self.axisMinPrice = 0;
@@ -585,9 +532,7 @@ static CGFloat MADisplayZoneHeight = 25;
     _showDate = YES;
 
 
-    _chartFrameColor = [UIColor lightGrayColor];
     _referencePriceColor = [UIColor lightGrayColor];
-    _referencePriceLineColor = [UIColor lightGrayColor];
     _klineIncreaseColor = [UIColor redColor];
     _klineDecreaseColor = [UIColor greenColor];
     _klineNotChangeColor = [UIColor blackColor];
@@ -615,6 +560,48 @@ static CGFloat MADisplayZoneHeight = 25;
     longPressGesture.numberOfTouchesRequired  = 1;
     self.longPressGesture = longPressGesture;
 
+
+    // chart frame
+    TTKLineChartFrameView* frameView = [[TTKLineChartFrameView alloc]initWithFrame:self.bounds];
+    [self addSubview:frameView];
+    self.frameView = frameView;
+    frameView.KlineAreaHeightRatio = KlineAreaHeightRatio;
+    frameView.klineAndVolumSpace = KlineAndVolumSpace;
+    frameView.axisPriceZoneCount = AxisPriceZoneCount;
+
+
+    //ma info label
+    UILabel* MAInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.bounds), MADisplayZoneHeight)];
+    MAInfoLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+    [self addSubview:MAInfoLabel];
+    self.maDisplayLabel = MAInfoLabel;
+
+    // focused record info
+    TTRecordInfoView* view = [[[NSBundle mainBundle] loadNibNamed:@"TTRecordInfoView" owner:nil options:nil] lastObject];
+    [self addSubview:view];
+    view.bounds = CGRectMake(0,0, RecordInfoDisplayWidth, RecordInfoDisplayHeight);
+    self.recordInfoView = view;
+    view.hidden = YES;
+
+    self.crossLine = [UIBezierPath bezierPath];
+    self.crossLine.lineWidth = 1.0;
+
+    // ma path
+    self.ma5 = [UIBezierPath bezierPath];
+    self.ma5.lineWidth = 0.5;
+    self.ma5.lineJoinStyle = kCGLineJoinBevel;
+
+    self.ma10 = [UIBezierPath bezierPath];
+    self.ma10.lineWidth = 0.5;
+    self.ma10.lineJoinStyle = kCGLineJoinBevel;
+
+    self.ma20 = [UIBezierPath bezierPath];
+    self.ma20.lineWidth = 0.5;
+    self.ma20.lineJoinStyle = kCGLineJoinBevel;
+
+    // date line
+    self.dateLine = [UIBezierPath bezierPath];
+    self.dateLine.lineWidth = 0.5;
 
 
 }

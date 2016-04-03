@@ -16,6 +16,7 @@
 
 @property(strong, nonatomic) TTStockMarketDataProvider* recordsProvider;
 
+@property(strong, nonatomic) NSMutableDictionary* earlistDates;
 
 
 @end
@@ -78,14 +79,14 @@
     completionHandler:(void (^)(NSArray *))completionHander{
 
     // check the existing records
-    TTKLineRecord *earlistRecord =(TTKLineRecord *) [(NSArray *)self.records[self.kLineType] lastObject];
-    if (earlistRecord && [fromDate timeIntervalSinceDate:earlistRecord.date] >= 0 ) {
+    NSDate* earlistDate = self.earlistDates[self.kLineType];
+    if ([fromDate timeIntervalSinceDate:earlistDate] >= 0 ) {
         NSArray* desiredRecords = [self getLocalRecordsFrom:fromDate to:toDate type:self.kLineType];
         completionHander(desiredRecords);
     }else{
         [self.recordsProvider getHistoryData:self.stockCode
                                         From:fromDate
-                                          to:earlistRecord ? [earlistRecord.date offsetDays:-1] : toDate
+                                          to:[earlistDate offsetDays:-1]
                                         type:self.kLineType success:^(NSArray *kLineRecords) {
 
                                             NSArray* allRecords = [self.records[self.kLineType] arrayByAddingObjectsFromArray:kLineRecords];
@@ -104,6 +105,7 @@
 
                                             }
                                             self.records[self.kLineType] = allRecords;
+                                            self.earlistDates[self.kLineType] = fromDate;
                                             NSArray* desiredRecords = [self getLocalRecordsFrom:fromDate to:toDate type:self.kLineType];
                                             completionHander(desiredRecords);
 
@@ -112,4 +114,12 @@
     }
 }
 
+-(instancetype)init{
+    self = [super init];
+    if (self) {
+        NSDate* date = [NSDate distantFuture];
+        _earlistDates = [@{TTKlineTypeDay:date,TTKlineTypeMonth:date,TTKlineTypeWeek:date} mutableCopy];
+    }
+    return self;
+}
 @end
