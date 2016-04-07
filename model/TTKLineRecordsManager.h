@@ -21,6 +21,6 @@
 
 -(void)getRecordsFrom:(NSDate* )fromDate
                    to:(NSDate*)toDate
-    completionHandler:(void(^)(NSArray* records)) completionHander;
+    completionHandler:(void(^)(NSArray* records,NSString* type)) completionHander;
 
 @end

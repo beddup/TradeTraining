@@ -16,7 +16,7 @@
                  From:(NSDate*) fromDate
                    to:(NSDate*) toDate
                  type:(NSString* )dataType
-              success:(void(^)(NSArray* kLineRecords))success
+              success:(void(^)(NSArray* kLineRecords, NSString* kType))success
               failure:(void(^)(NSError*))fail;
 
 @end

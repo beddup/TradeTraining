@@ -2,12 +2,11 @@
 //  TTKLineChart.h
 //  TradeTraining
 //
-//  Created by Amay on 3/21/16.
+//  Created by Amay on 4/6/16.
 //  Copyright © 2016 Beddup. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-#import "TTKLineRecord.h"
 
 @protocol TTKLineChartDataSource
 
@@ -15,10 +14,9 @@
                     From:(NSDate*)from
                       to:(NSDate*)to
                kLineType:(NSString*)kLineType
-        completionHander:(void(^)(NSArray* records)) completionHander;
+        completionHander:(void(^)(NSArray* records,NSString* type)) completionHander;
 
 @end
-
 
 @interface TTKLineChart : UIView
 

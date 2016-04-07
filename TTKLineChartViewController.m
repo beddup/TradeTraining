@@ -141,9 +141,9 @@
 
 -(void)highLightButton:(UIButton*) button{
 
-    self.weekK.backgroundColor = [UIColor clearColor];
-    self.dayK.backgroundColor = [UIColor clearColor];
-    self.monthK.backgroundColor = [UIColor clearColor];
+    self.weekK.backgroundColor = [UIColor whiteColor];
+    self.dayK.backgroundColor = [UIColor whiteColor];
+    self.monthK.backgroundColor = [UIColor whiteColor];
 
     button.layer.cornerRadius = 3.0;
     button.backgroundColor  = [UIColor orangeColor];
@@ -167,12 +167,11 @@
 }
 
 #pragma mark - TTKLineChartDataSource
--(void)getRecordsOfStock:(NSString *)stockCode From:(NSDate *)from to:(NSDate *)to kLineType:(NSString *)kLineType completionHander:(void (^)(NSArray *))completionHander{
+-(void)getRecordsOfStock:(NSString *)stockCode From:(NSDate *)from to:(NSDate *)to kLineType:(NSString *)kLineType completionHander:(void (^)(NSArray *,NSString*))completionHander{
 
     self.recordManager.stockCode = stockCode;
     self.recordManager.kLineType = kLineType;
     [self.recordManager getRecordsFrom:from to:to completionHandler:completionHander];
-
 }
 
 #pragma mark - Trade Training
@@ -207,7 +206,7 @@
     StockCode* stock = [TTStockCodeHelper randomStock];
     self.recordManager.stockCode = stock.completeCode;
     self.recordManager.kLineType = TTKlineTypeDay;
-    [self.recordManager getRecordsFrom:[NSDate distantPast] to:[NSDate date]  completionHandler:^(NSArray *records) {
+    [self.recordManager getRecordsFrom:[NSDate distantPast] to:[NSDate date]  completionHandler:^(NSArray *records,NSString* type) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self.indicator removeFromSuperview];
             self.indicator = nil;

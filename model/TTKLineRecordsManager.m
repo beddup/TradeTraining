@@ -76,18 +76,18 @@
 
 -(void)getRecordsFrom:(NSDate *)fromDate
                    to:(NSDate *)toDate
-    completionHandler:(void (^)(NSArray *))completionHander{
+    completionHandler:(void (^)(NSArray *,NSString*))completionHander{
 
     // check the existing records
     NSDate* earlistDate = self.earlistDates[self.kLineType];
     if ([fromDate timeIntervalSinceDate:earlistDate] >= 0 ) {
         NSArray* desiredRecords = [self getLocalRecordsFrom:fromDate to:toDate type:self.kLineType];
-        completionHander(desiredRecords);
+        completionHander(desiredRecords,self.kLineType);
     }else{
         [self.recordsProvider getHistoryData:self.stockCode
                                         From:fromDate
                                           to:[earlistDate offsetDays:-1]
-                                        type:self.kLineType success:^(NSArray *kLineRecords) {
+                                        type:self.kLineType success:^(NSArray *kLineRecords,NSString* kType) {
 
                                             NSArray* allRecords = [self.records[self.kLineType] arrayByAddingObjectsFromArray:kLineRecords];
 
@@ -107,7 +107,7 @@
                                             self.records[self.kLineType] = allRecords;
                                             self.earlistDates[self.kLineType] = fromDate;
                                             NSArray* desiredRecords = [self getLocalRecordsFrom:fromDate to:toDate type:self.kLineType];
-                                            completionHander(desiredRecords);
+                                            completionHander(desiredRecords,kType);
 
         } failure:nil];
 

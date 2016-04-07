@@ -37,7 +37,7 @@
                    From:(NSDate*) fromDate
                      to:(NSDate*) toDate
                    type:(NSString *)dataType
-                success:(void (^)(NSArray *))success
+                success:(void (^)(NSArray *records,NSString* kType))success
                 failure:(void (^)(NSError *))fail{
 
 
@@ -62,10 +62,9 @@
                 }
 
             }
-            success([fetchedResult copy]);
+            success([fetchedResult copy],dataType);
         }
     }];
-
     [downLoadTask resume];
 
 }
