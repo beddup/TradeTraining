@@ -86,9 +86,12 @@
 
     [self calculateMaxPriceAndMaxVolumn];
 
-    if (self.records.count) {
-        [self setNeedsDisplay];
+    if (self.records.count <= 0 ) {
+        self.lastVisibleKLineX = CGRectGetWidth(self.bounds) * 2 / 3;
+        self.lastVisibleRecordIndex = 0;
     }
+
+    [self setNeedsDisplay];
 
 }
 
@@ -107,7 +110,12 @@
 #pragma mark - CalcutionForDrawing
 -(void)calculateMaxPriceAndMaxVolumn{
 
+    [self.ma5 removeAllPoints];
+    [self.ma10 removeAllPoints];
+    [self.ma20 removeAllPoints];
+
     if(!self.records.count) {
+
         return;
     }
 
@@ -121,13 +129,6 @@
     CGFloat maxVolumn = 0;
     while ( x > - self.KWidth  ) {
 
-        if (recordIndex >= self.records.count && ![self.kLineType isEqualToString:TTKlineTypeMonth] && !self.isFetchingData){
-            self.isFetchingData = YES;
-            [self.delegate feedMoreDateCompletionHandler:^{
-                self.isFetchingData = NO;
-            }];
-            break;
-        }
         TTKLineRecord * record = self.records[recordIndex];
         if (record.maxPrice > maxPrice) {
             maxPrice = record.maxPrice;
@@ -141,6 +142,15 @@
 
         x -= self.KInterSpace + self.KWidth;
         recordIndex += 1;
+        if (recordIndex >= self.records.count) {
+            if (![self.kLineType isEqualToString:TTKlineTypeMonth] && !self.isFetchingData){
+                self.isFetchingData = YES;
+                [self.delegate feedMoreDateCompletionHandler:^{
+                    self.isFetchingData = NO;
+                }];
+            }
+            break;
+        }
     }
 
     if (self.axisMaxPrice < maxPrice || self.axisMaxPrice > maxPrice * 1.2) {
@@ -161,12 +171,8 @@
     self.heightAndPriceAspect = self.kLineAreaHeight / (self.axisMaxPrice - self.axisMinPrice);
 
     // create ma line here instead of in drawRect to try to save some time
-    [self.ma5 removeAllPoints];
-    [self.ma10 removeAllPoints];
-    [self.ma20 removeAllPoints];
-
     recordIndex =self.lastVisibleRecordIndex > 0 ? self.lastVisibleRecordIndex - 1 : self.lastVisibleRecordIndex;
-        x = self.lastVisibleRecordIndex > 0 ? self.lastVisibleKLineX + self.KWidth + self.KInterSpace : self.lastVisibleKLineX;
+    x = self.lastVisibleRecordIndex > 0 ? self.lastVisibleKLineX + self.KWidth + self.KInterSpace : self.lastVisibleKLineX;
     TTKLineRecord* record = self.records[recordIndex];
 
     [self.ma5 moveToPoint:CGPointMake(x + self.KWidth / 2, (self.axisMaxPrice - record.MA5) * self.heightAndPriceAspect)];

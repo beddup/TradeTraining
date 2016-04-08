@@ -16,7 +16,6 @@
 
 @property(weak, nonatomic)TTRecordInfoView* recordInfoView;
 @property(weak, nonatomic)UILabel* maDisplayLabel;
-@property(weak, nonatomic) UIActivityIndicatorView* fetchDateIndicator;
 @property(weak,nonatomic) TTCandleChart* candleChart;
 @property(strong,nonatomic)NSArray* priceLabels;
 
@@ -41,14 +40,11 @@
 -(void)setRecords:(NSArray *)records{
 
     _records = records;
-
-    [self.fetchDateIndicator removeFromSuperview];
-    self.fetchDateIndicator = nil;
-
-    if (self.records.count) {
-        self.candleChart.records = records;
+    self.candleChart.records = records;
+    if (records.count <= 0) {
+        [self.priceLabels makeObjectsPerformSelector:@selector(setText:) withObject:nil];
     }
-    
+
 }
 
 -(void)setStockCode:(NSString *)stockCode{
@@ -59,18 +55,12 @@
 
 }
 
-#pragma mark - update indicator
--(void)showFetchDateIndicatorAtCenter:(CGPoint)center{
-    if (!self.fetchDateIndicator) {
-        UIActivityIndicatorView* indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        indicator.bounds = CGRectMake(0, 0, 100, 100);
-        [self addSubview:indicator];
-        self.fetchDateIndicator = indicator;
-        [self.fetchDateIndicator startAnimating];
-    }
-    self.fetchDateIndicator.center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
-
+-(void)setShowDate:(BOOL)showDate{
+    _showDate = showDate;
+    self.candleChart.showDate = showDate;
+    self.recordInfoView.showDate = showDate;
 }
+#pragma mark - update indicator
 
 static CGFloat RecordInfoDisplayWidth = 140;
 static CGFloat RecordInfoDisplayHeight = 160;
@@ -130,7 +120,6 @@ static CGRect RecordInfoViewFrameWhenInLeftHalf;
         fromDate = [NSDate distantPast];
     }
 
-    [self showFetchDateIndicatorAtCenter:CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds))];
     [self.dataSource getRecordsOfStock:self.stockCode
                                   From:fromDate
                                     to:now
@@ -153,8 +142,6 @@ static CGRect RecordInfoViewFrameWhenInLeftHalf;
 -(void)layoutSubviews{
 
     self.candleChart.frame = self.bounds;
-
-    self.fetchDateIndicator.center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
 
     self.maDisplayLabel.frame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), MADisplayZoneHeight);
 

@@ -48,6 +48,8 @@
     if (_stockCode != stockCode) {
         _stockCode = stockCode;
         self.records = nil;
+        NSDate* date = [NSDate distantFuture];
+        self.earlistDates = [@{TTKlineTypeDay:date,TTKlineTypeMonth:date,TTKlineTypeWeek:date} mutableCopy];
     }
 
 }
@@ -80,13 +82,17 @@
 
     // check the existing records
     NSDate* earlistDate = self.earlistDates[self.kLineType];
-    if ([fromDate timeIntervalSinceDate:earlistDate] >= 0 ) {
+    if ([earlistDate timeIntervalSinceNow] > 0) {
+        // no earlist date
+        earlistDate = nil;
+    }
+    if (earlistDate && [fromDate timeIntervalSinceDate:earlistDate] >= 0 ) {
         NSArray* desiredRecords = [self getLocalRecordsFrom:fromDate to:toDate type:self.kLineType];
         completionHander(desiredRecords,self.kLineType);
     }else{
         [self.recordsProvider getHistoryData:self.stockCode
                                         From:fromDate
-                                          to:[earlistDate offsetDays:-1]
+                                          to:earlistDate ? [earlistDate offsetDays:-1] : toDate
                                         type:self.kLineType success:^(NSArray *kLineRecords,NSString* kType) {
 
                                             NSArray* allRecords = [self.records[self.kLineType] arrayByAddingObjectsFromArray:kLineRecords];

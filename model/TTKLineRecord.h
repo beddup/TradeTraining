@@ -40,7 +40,7 @@ extern NSString* const TTKlineTypeMonth;
                        date:(NSDate *)date
          previousClosePrice:(float)previousClosePrice;
 
--(instancetype)initWithYahooichartString:(NSString *)string previousString:(NSString* )previousString stockCode:(NSString*)stockCode; // @"Date,Open,High,Low,Close,Volume,Adj Close"
+-(instancetype)initWithYahooichartString:(NSString *)string stockCode:(NSString*)stockCode; // @"Date,Open,High,Low,Close,Volume,Adj Close"
 
 
 @end
