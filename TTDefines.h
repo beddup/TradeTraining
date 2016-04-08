@@ -27,3 +27,10 @@ typedef enum : NSUInteger {
     TTMAType20,
 } TTMAType;
 
+#define KlineAreaHeightRatio  0.8
+#define KlineAndVolumSpace 15.0
+#define AxisPriceZoneCount  4
+
+#define MA5Color [UIColor orangeColor]
+#define MA10Color [UIColor brownColor]
+#define MA20Color [UIColor purpleColor]

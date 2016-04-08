@@ -37,7 +37,7 @@
                    From:(NSDate*) fromDate
                      to:(NSDate*) toDate
                    type:(NSString *)dataType
-                success:(void (^)(NSArray *))success
+                success:(void (^)(NSArray *records,NSString* kType))success
                 failure:(void (^)(NSError *))fail{
 
 
@@ -53,19 +53,19 @@
             NSArray* kLineRecords = [csvRecords componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]];
             NSMutableArray * fetchedResult = [@[] mutableCopy];
 
-            for (NSInteger index = 1; index < kLineRecords.count - 1; index++) {
-
+            for (NSInteger index = kLineRecords.count - 1; index >= 0; index--) {
                 NSString* recordString = kLineRecords[index];
-                TTKLineRecord *record = [[TTKLineRecord alloc] initWithYahooichartString:recordString previousString:kLineRecords[index + 1] stockCode:completeStockCode];
+                TTKLineRecord *record = [[TTKLineRecord alloc] initWithYahooichartString:recordString stockCode:completeStockCode];
                 if (record) {
-                    [fetchedResult addObject:record];
+                    record.previousClosePrice = [(TTKLineRecord*)[fetchedResult firstObject] closePrice];
+                    [fetchedResult insertObject:record atIndex:0];
                 }
-
             }
-            success([fetchedResult copy]);
+            // the last record would not have the previous close price, so discard it
+            [fetchedResult removeLastObject];
+            success([fetchedResult copy],dataType);
         }
     }];
-
     [downLoadTask resume];
 
 }

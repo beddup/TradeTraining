@@ -18,8 +18,8 @@
                         <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="grt-gX-CUN" customClass="TTTrainingKLineChart">
-                                <rect key="frame" x="12" y="38" width="576" height="446"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="grt-gX-CUN" customClass="TTKLineChart">
+                                <rect key="frame" x="12" y="38" width="576" height="490"/>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -71,27 +71,15 @@
                         </constraints>
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
-                    <toolbarItems>
-                        <barButtonItem title="买入" id="Jm7-Nu-3S7">
+                    <toolbarItems/>
+                    <navigationItem key="navigationItem" id="IUS-5F-fXZ">
+                        <barButtonItem key="leftBarButtonItem" title="走势训练" id="azb-ad-nkj">
                             <connections>
-                                <action selector="buy:" destination="BYZ-38-t0r" id="N59-kK-Ajc"/>
+                                <segue destination="fBI-BQ-380" kind="presentation" identifier="tradeTraining" id="Em0-2y-PS1"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="LmT-HD-hTC"/>
-                        <barButtonItem title="卖出" id="sig-mZ-o7t">
-                            <connections>
-                                <action selector="sell:" destination="BYZ-38-t0r" id="Esb-qk-v3a"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="Aqr-uf-BTE"/>
-                        <barButtonItem title="下一交易日" id="UCK-fo-g7n">
-                            <connections>
-                                <action selector="showNextRecord:" destination="BYZ-38-t0r" id="ncy-Ta-hq2"/>
-                            </connections>
-                        </barButtonItem>
-                    </toolbarItems>
-                    <navigationItem key="navigationItem" id="IUS-5F-fXZ"/>
-                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    </navigationItem>
+                    <nil key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="dayK" destination="oaF-Cp-1Pz" id="OTn-yM-Wq1"/>
                         <outlet property="kLineChart" destination="grt-gX-CUN" id="4YS-D1-rfL"/>
@@ -101,7 +89,78 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1341" y="99"/>
+            <point key="canvasLocation" x="1253" y="12"/>
+        </scene>
+        <!--Line Training View Controller-->
+        <scene sceneID="vha-ei-OuR">
+            <objects>
+                <viewController id="MNc-QL-qDI" customClass="TTKLineTrainingViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Z7Y-ZO-fzZ"/>
+                        <viewControllerLayoutGuide type="bottom" id="ATj-ux-wGa"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="wmx-jh-bof">
+                        <rect key="frame" x="0.0" y="64" width="600" height="492"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tdA-0B-5d0" customClass="TTTrainingKLineChart">
+                                <rect key="frame" x="12" y="8" width="576" height="476"/>
+                                <animations/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
+                        <animations/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="ATj-ux-wGa" firstAttribute="top" secondItem="tdA-0B-5d0" secondAttribute="bottom" constant="8" id="96F-zC-VUS"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="tdA-0B-5d0" secondAttribute="trailing" constant="-8" id="NI3-F1-gnP"/>
+                            <constraint firstItem="tdA-0B-5d0" firstAttribute="centerY" secondItem="wmx-jh-bof" secondAttribute="centerY" id="T6p-yE-iyE"/>
+                            <constraint firstItem="tdA-0B-5d0" firstAttribute="width" secondItem="wmx-jh-bof" secondAttribute="width" id="UDo-u8-spD"/>
+                            <constraint firstItem="tdA-0B-5d0" firstAttribute="top" secondItem="Z7Y-ZO-fzZ" secondAttribute="bottom" constant="8" id="X1s-Qm-Y9L"/>
+                            <constraint firstItem="tdA-0B-5d0" firstAttribute="leading" secondItem="wmx-jh-bof" secondAttribute="leadingMargin" constant="-8" id="bwF-UI-e0F"/>
+                            <constraint firstItem="tdA-0B-5d0" firstAttribute="height" secondItem="wmx-jh-bof" secondAttribute="height" id="k2U-2o-wqf"/>
+                            <constraint firstItem="tdA-0B-5d0" firstAttribute="centerX" secondItem="wmx-jh-bof" secondAttribute="centerX" id="nbd-T8-PC9"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="T6p-yE-iyE"/>
+                                <exclude reference="UDo-u8-spD"/>
+                                <exclude reference="k2U-2o-wqf"/>
+                                <exclude reference="nbd-T8-PC9"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <toolbarItems>
+                        <barButtonItem title="买入" id="Jm7-Nu-3S7">
+                            <connections>
+                                <action selector="buy:" destination="MNc-QL-qDI" id="UzR-2J-q8v"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem width="42" style="plain" systemItem="fixedSpace" id="LmT-HD-hTC"/>
+                        <barButtonItem title="卖出" id="sig-mZ-o7t">
+                            <connections>
+                                <action selector="sell:" destination="MNc-QL-qDI" id="E1i-LU-eLG"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="Aqr-uf-BTE"/>
+                        <barButtonItem title="下一交易日" id="UCK-fo-g7n">
+                            <connections>
+                                <action selector="showNextRecord:" destination="MNc-QL-qDI" id="Q2T-gF-vjd"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" id="ART-zN-w0h">
+                        <barButtonItem key="rightBarButtonItem" id="FHa-gG-afe"/>
+                    </navigationItem>
+                    <simulatedToolbarMetrics key="simulatedBottomBarMetrics" translucent="NO"/>
+                    <connections>
+                        <outlet property="kLineChart" destination="tdA-0B-5d0" id="Kvb-hd-ngX"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="BIO-ay-FcI" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2691" y="12"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="gm9-vm-uRQ">
@@ -121,6 +180,25 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jIq-ns-j1R" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="399" y="79"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="izC-PF-zYt">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="fBI-BQ-380" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="NVu-Fc-f5C">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <animations/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="MNc-QL-qDI" kind="relationship" relationship="rootViewController" id="cVi-Zt-nem"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="1h2-TL-tq7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1879" y="12"/>
         </scene>
     </scenes>
 </document>

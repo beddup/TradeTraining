@@ -54,15 +54,11 @@ NSString* const TTKlineTypeMonth = @"m";
     }
     return self;
 }
--(instancetype)initWithYahooichartString:(NSString *)string previousString:(NSString* )previousString stockCode:(NSString*)code{
+-(instancetype)initWithYahooichartString:(NSString *)string stockCode:(NSString*)code{
 
 
     NSArray* record = [string componentsSeparatedByString:@","];//Date,Open,High,Low,Close,Volume,Adj Close
-    NSArray* previousRecord = [previousString componentsSeparatedByString:@","];
     if (record.count < 7 || (((NSString *)record[5]).integerValue == 0 && ![code isEqualToString:@"000001.ss"] && ![code isEqualToString:@"399001.sz"])) {
-        return nil;
-    }
-    if (previousRecord.count < 7 || (((NSString *)previousRecord[5]).integerValue == 0 && ![code isEqualToString:@"000001.ss"] && ![code isEqualToString:@"399001.sz"])) {
         return nil;
     }
 
@@ -72,7 +68,7 @@ NSString* const TTKlineTypeMonth = @"m";
                                            min:((NSString *)record[3]).floatValue
                                         volumn:((NSString *)record[5]).integerValue / 1000
                                           date:[[self.yahooichartDateFormatter dateFromString:record[0]] dateByAddingTimeInterval:60 * 60]
-                            previousClosePrice:((NSString*)previousRecord[4]).floatValue];
+                            previousClosePrice:-1];
 
 }
 

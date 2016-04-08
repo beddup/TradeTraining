@@ -16,6 +16,7 @@
 
 @property(strong, nonatomic) TTStockMarketDataProvider* recordsProvider;
 
+@property(strong, nonatomic) NSMutableDictionary* earlistDates;
 
 
 @end
@@ -47,6 +48,8 @@
     if (_stockCode != stockCode) {
         _stockCode = stockCode;
         self.records = nil;
+        NSDate* date = [NSDate distantFuture];
+        self.earlistDates = [@{TTKlineTypeDay:date,TTKlineTypeMonth:date,TTKlineTypeWeek:date} mutableCopy];
     }
 
 }
@@ -75,18 +78,22 @@
 
 -(void)getRecordsFrom:(NSDate *)fromDate
                    to:(NSDate *)toDate
-    completionHandler:(void (^)(NSArray *))completionHander{
+    completionHandler:(void (^)(NSArray *,NSString*))completionHander{
 
     // check the existing records
-    TTKLineRecord *earlistRecord =(TTKLineRecord *) [(NSArray *)self.records[self.kLineType] lastObject];
-    if (earlistRecord && [fromDate timeIntervalSinceDate:earlistRecord.date] >= 0 ) {
+    NSDate* earlistDate = self.earlistDates[self.kLineType];
+    if ([earlistDate timeIntervalSinceNow] > 0) {
+        // no earlist date
+        earlistDate = nil;
+    }
+    if (earlistDate && [fromDate timeIntervalSinceDate:earlistDate] >= 0 ) {
         NSArray* desiredRecords = [self getLocalRecordsFrom:fromDate to:toDate type:self.kLineType];
-        completionHander(desiredRecords);
+        completionHander(desiredRecords,self.kLineType);
     }else{
         [self.recordsProvider getHistoryData:self.stockCode
                                         From:fromDate
-                                          to:earlistRecord ? [earlistRecord.date offsetDays:-1] : toDate
-                                        type:self.kLineType success:^(NSArray *kLineRecords) {
+                                          to:earlistDate ? [earlistDate offsetDays:-1] : toDate
+                                        type:self.kLineType success:^(NSArray *kLineRecords,NSString* kType) {
 
                                             NSArray* allRecords = [self.records[self.kLineType] arrayByAddingObjectsFromArray:kLineRecords];
 
@@ -104,12 +111,21 @@
 
                                             }
                                             self.records[self.kLineType] = allRecords;
+                                            self.earlistDates[self.kLineType] = fromDate;
                                             NSArray* desiredRecords = [self getLocalRecordsFrom:fromDate to:toDate type:self.kLineType];
-                                            completionHander(desiredRecords);
+                                            completionHander(desiredRecords,kType);
 
         } failure:nil];
 
     }
 }
 
+-(instancetype)init{
+    self = [super init];
+    if (self) {
+        NSDate* date = [NSDate distantFuture];
+        _earlistDates = [@{TTKlineTypeDay:date,TTKlineTypeMonth:date,TTKlineTypeWeek:date} mutableCopy];
+    }
+    return self;
+}
 @end
