@@ -18,6 +18,7 @@
 @property(weak, nonatomic)UILabel* maDisplayLabel;
 @property(weak,nonatomic) TTCandleChart* candleChart;
 @property(strong,nonatomic)NSArray* priceLabels;
+@property(strong,nonatomic)NSMutableArray* dateLabels;
 
 @end
 
@@ -57,18 +58,14 @@
 
 -(void)setShowDate:(BOOL)showDate{
     _showDate = showDate;
-    self.candleChart.showDate = showDate;
     self.recordInfoView.showDate = showDate;
+    [self.dateLabels makeObjectsPerformSelector:@selector(setHidden:) withObject:@(YES)];
 }
 #pragma mark - update indicator
 
 static CGFloat RecordInfoDisplayWidth = 140;
 static CGFloat RecordInfoDisplayHeight = 160;
 static CGFloat MADisplayZoneHeight = 25;
-
-static CGRect RecordInfoViewFrameWhenInRightHalf;
-static CGRect RecordInfoViewFrameWhenInLeftHalf;
-
 
 #pragma mark - TTCandleChartDelegate
 -(void)focusedRecord:(TTKLineRecord *)focusedRecord inRightHalfArea:(BOOL)rightHalf{
@@ -84,8 +81,8 @@ static CGRect RecordInfoViewFrameWhenInLeftHalf;
         [self.maDisplayLabel setAttributedText:maString];
 
         // frame
-        self.recordInfoView.frame = rightHalf ? RecordInfoViewFrameWhenInRightHalf : RecordInfoViewFrameWhenInLeftHalf;
-        [self layoutIfNeeded];
+        self.recordInfoView.center = rightHalf ? CGPointMake(RecordInfoDisplayWidth / 2, RecordInfoDisplayHeight / 2) : CGPointMake(CGRectGetWidth(self.bounds) - RecordInfoDisplayWidth / 2, RecordInfoDisplayHeight / 2);
+        NSLog(@"frame after:%@",NSStringFromCGRect(self.recordInfoView.frame));
         self.recordInfoView.hidden = NO;
 
     }else{
@@ -102,6 +99,40 @@ static CGRect RecordInfoViewFrameWhenInLeftHalf;
         UILabel* label = self.priceLabels[index];
         label.text = [NSString stringWithFormat:@"%.2f",max - delta * (index + 1)];
     }
+
+}
+-(void)dateMeterChanged:(NSDictionary* )dateStringAndPointX{
+
+    [self.dateLabels makeObjectsPerformSelector:@selector(setHidden:) withObject:@(YES)];
+
+    if (!self.showDate) {
+        return;
+    }
+    if (dateStringAndPointX.count <= 0) {
+        return;
+    }
+
+    NSArray* dateStrings = [dateStringAndPointX allKeys];
+    for (NSInteger index = 0; index < dateStrings.count; index++) {
+        float x =[(NSNumber *)dateStringAndPointX[dateStrings[index]] floatValue];
+        if (self.dateLabels.count <= index) {
+            UILabel* label = [[UILabel alloc]initWithFrame:CGRectZero];
+            label.center = CGPointMake(x,CGRectGetHeight(self.bounds) * KlineAreaHeightRatio + 8);
+            label.bounds = CGRectMake(0, 0, 60, KlineAndVolumSpace);
+            label.text = dateStrings[index];
+            label.textColor = [UIColor darkGrayColor];
+            label.font = [UIFont systemFontOfSize:12];
+            label.textAlignment = NSTextAlignmentCenter;
+            [self addSubview:label];
+            [self.dateLabels addObject:label];
+        }else{
+            UILabel* label = self.dateLabels[index];
+            label.text = dateStrings[index];
+            label.center = CGPointMake(x,CGRectGetHeight(self.bounds) * KlineAreaHeightRatio + 8);
+            label.hidden = NO;
+        }
+    }
+
 
 }
 
@@ -138,17 +169,13 @@ static CGRect RecordInfoViewFrameWhenInLeftHalf;
                       }];
 }
 
+
 #pragma  mark - setup
 -(void)layoutSubviews{
 
     self.candleChart.frame = self.bounds;
 
     self.maDisplayLabel.frame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), MADisplayZoneHeight);
-
-    RecordInfoViewFrameWhenInLeftHalf = CGRectMake(CGRectGetWidth(self.bounds) - RecordInfoDisplayWidth, MADisplayZoneHeight, RecordInfoDisplayWidth, RecordInfoDisplayHeight);
-    RecordInfoViewFrameWhenInRightHalf = CGRectMake(0, MADisplayZoneHeight, RecordInfoDisplayWidth, RecordInfoDisplayHeight);
-
-
     for (NSInteger index = 0; index < self.priceLabels.count; index++) {
         UILabel* label = self.priceLabels[index];
         label.frame = CGRectMake(0, KlineAreaHeightRatio * CGRectGetHeight(self.bounds) / AxisPriceZoneCount * (index + 1) - 15, 60, 15);
@@ -164,6 +191,8 @@ static CGRect RecordInfoViewFrameWhenInLeftHalf;
 
     _kLineType = TTKlineTypeDay;
 
+    [self setTranslatesAutoresizingMaskIntoConstraints:NO];
+
     self.layer.borderWidth = 0.5;
     self.layer.borderColor = [UIColor lightGrayColor].CGColor;
 
@@ -172,7 +201,7 @@ static CGRect RecordInfoViewFrameWhenInLeftHalf;
     [self addSubview:candleChart];
     candleChart.delegate = self;
     candleChart.kLineType = _kLineType;
-    self.candleChart = candleChart;
+    _candleChart = candleChart;
 
     // price label
     NSMutableArray* labels = [@[] mutableCopy];
@@ -183,7 +212,9 @@ static CGRect RecordInfoViewFrameWhenInLeftHalf;
         [self addSubview:priceLabel];
         [labels addObject:priceLabel];
     }
-    self.priceLabels = [labels copy];
+    _priceLabels = [labels copy];
+
+    _dateLabels = [@[] mutableCopy];
 
     //ma info label
     UILabel* MAInfoLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(self.bounds), MADisplayZoneHeight)];
@@ -195,11 +226,12 @@ static CGRect RecordInfoViewFrameWhenInLeftHalf;
 
     //focused record info
     TTRecordInfoView* view = [[[NSBundle mainBundle] loadNibNamed:@"TTRecordInfoView" owner:nil options:nil] lastObject];
+    view.bounds = CGRectMake(0,0, RecordInfoDisplayWidth, RecordInfoDisplayHeight);
     [self addSubview:view];
     view.hidden = YES;
-    self.recordInfoView.frame = CGRectMake(0,MADisplayZoneHeight, RecordInfoDisplayWidth, RecordInfoDisplayHeight);
-    [self layoutIfNeeded];
     self.recordInfoView = view;
+
+    self.showDate = YES;
 
 }
 -(instancetype)initWithFrame:(CGRect)frame{

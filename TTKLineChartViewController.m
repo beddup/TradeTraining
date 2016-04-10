@@ -50,6 +50,7 @@
     [self setupSearchController];
     [self setupNavigationItem];
     [self highLightButton:self.dayK];
+
     // Do any additional setup after loading the view, typically from a nib.
 }
 

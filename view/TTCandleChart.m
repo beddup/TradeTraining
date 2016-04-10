@@ -35,7 +35,6 @@
 @property(strong,nonatomic) UIColor* klineDecreaseColor;
 @property(strong,nonatomic) UIColor* klineNotChangeColor;
 @property(strong,nonatomic) UIColor* focusedCrossLineColor;
-@property(strong,nonatomic) UIColor* dateColor;
 
 // paragraph stye
 @property(strong,nonatomic)NSMutableParagraphStyle* alignmentCenter;
@@ -57,6 +56,11 @@
 @property(nonatomic)CGRect dirtyRect; // dirtyRect indicate which part of the view should be redrawn
 
 @property(nonatomic)BOOL isFetchingData;
+@property(nonatomic)BOOL needMoreDate;
+
+@property(strong,nonatomic)UIBezierPath* dateLine;
+@property(strong,nonatomic)NSMutableDictionary* dateStringsAndPositon; // date string : position X
+
 
 @end
 
@@ -83,6 +87,7 @@
 
     self.needResetBkgView = YES;
     self.isFetchingData = NO;
+    self.needMoreDate = NO;
 
     [self calculateMaxPriceAndMaxVolumn];
 
@@ -110,15 +115,29 @@
 #pragma mark - CalcutionForDrawing
 -(void)calculateMaxPriceAndMaxVolumn{
 
-    [self.ma5 removeAllPoints];
-    [self.ma10 removeAllPoints];
-    [self.ma20 removeAllPoints];
-
     if(!self.records.count) {
 
         return;
     }
 
+    [self updateAxisValue];
+
+    // update ma line here instead of in drawRect to try to save some time
+    [self updateMALine];
+    [self updateDateMeter];
+
+    if (self.needMoreDate && ![self.kLineType isEqualToString:TTKlineTypeMonth] && !self.isFetchingData){
+            self.isFetchingData = YES;
+            [self.delegate feedMoreDateCompletionHandler:^{
+                self.isFetchingData = NO;
+            }];
+    }
+    [self.delegate dateMeterChanged:[self.dateStringsAndPositon copy]];
+    [self.delegate pricenRangeChangedWithMaxPrice:self.axisMaxPrice minPrice:self.axisMinPrice];
+
+}
+
+-(void)updateAxisValue{
 
     NSInteger recordIndex = self.lastVisibleRecordIndex;
     CGFloat x = self.lastVisibleKLineX;
@@ -128,7 +147,9 @@
     CGFloat minPrice = [(TTKLineRecord*)self.records[0] minPrice];
     CGFloat maxVolumn = 0;
     while ( x > - self.KWidth  ) {
-
+        if (recordIndex >= self.records.count) {
+            break;
+        }
         TTKLineRecord * record = self.records[recordIndex];
         if (record.maxPrice > maxPrice) {
             maxPrice = record.maxPrice;
@@ -142,25 +163,14 @@
 
         x -= self.KInterSpace + self.KWidth;
         recordIndex += 1;
-        if (recordIndex >= self.records.count) {
-            if (![self.kLineType isEqualToString:TTKlineTypeMonth] && !self.isFetchingData){
-                self.isFetchingData = YES;
-                [self.delegate feedMoreDateCompletionHandler:^{
-                    self.isFetchingData = NO;
-                }];
-            }
-            break;
-        }
     }
 
     if (self.axisMaxPrice < maxPrice || self.axisMaxPrice > maxPrice * 1.2) {
         self.axisMaxPrice = maxPrice * 1.1;
-        [self.delegate pricenRangeChangedWithMaxPrice:self.axisMaxPrice minPrice:self.axisMinPrice];
         self.needResetBkgView = YES;
     }
     if (self.axisMinPrice > minPrice || self.axisMinPrice < minPrice * 0.8) {
         self.axisMinPrice = minPrice * 0.9;
-        [self.delegate pricenRangeChangedWithMaxPrice:self.axisMaxPrice minPrice:self.axisMinPrice];
         self.needResetBkgView = YES;
     }
     if (self.maxVolumn < maxVolumn || self.maxVolumn > maxVolumn * 1.3) {
@@ -170,9 +180,16 @@
 
     self.heightAndPriceAspect = self.kLineAreaHeight / (self.axisMaxPrice - self.axisMinPrice);
 
-    // create ma line here instead of in drawRect to try to save some time
-    recordIndex =self.lastVisibleRecordIndex > 0 ? self.lastVisibleRecordIndex - 1 : self.lastVisibleRecordIndex;
-    x = self.lastVisibleRecordIndex > 0 ? self.lastVisibleKLineX + self.KWidth + self.KInterSpace : self.lastVisibleKLineX;
+}
+-(void)updateMALine{
+
+    [self.ma5 removeAllPoints];
+    [self.ma10 removeAllPoints];
+    [self.ma20 removeAllPoints];
+
+    NSInteger recordIndex =self.lastVisibleRecordIndex > 0 ? self.lastVisibleRecordIndex - 1 : self.lastVisibleRecordIndex;
+    CGFloat x = self.lastVisibleRecordIndex > 0 ? self.lastVisibleKLineX + self.KWidth + self.KInterSpace : self.lastVisibleKLineX;
+
     TTKLineRecord* record = self.records[recordIndex];
 
     [self.ma5 moveToPoint:CGPointMake(x + self.KWidth / 2, (self.axisMaxPrice - record.MA5) * self.heightAndPriceAspect)];
@@ -193,6 +210,53 @@
         }
         if (record.MA20 > 0) {
             [self.ma20 addLineToPoint:CGPointMake(x +self.KWidth / 2, (self.axisMaxPrice - record.MA20) * self.heightAndPriceAspect)];
+        }
+
+        x -= self.KInterSpace + self.KWidth;
+        recordIndex += 1;
+    }
+}
+
+-(void)updateDateMeter{
+
+    NSInteger recordIndex = self.lastVisibleRecordIndex;
+    CGFloat x = self.lastVisibleKLineX;
+    [self.dateLine removeAllPoints];
+    [self.dateStringsAndPositon removeAllObjects];
+
+    while ( x > - self.KWidth  ) {
+        if (recordIndex >= self.records.count) {
+            break;
+        }
+        if (recordIndex > 0) {
+            TTKLineRecord* record = self.records[recordIndex];
+            NSDate* previousRecordDate = ((TTKLineRecord*)self.records[recordIndex - 1]).date;
+            NSDate* theDate = record.date;
+            NSString* dateString = nil;
+            if ([self.kLineType isEqualToString:TTKlineTypeDay]){
+                if ([previousRecordDate month] != [theDate month] || [previousRecordDate year] != [theDate year]) {
+                    dateString = [NSString stringWithFormat:@"%lu-%lu",(unsigned long)[previousRecordDate year],(unsigned long)[previousRecordDate month]];;
+                }
+            }else if ([self.kLineType isEqualToString:TTKlineTypeWeek]){
+                if ([previousRecordDate year] != [theDate year]) {
+                    dateString = [NSString stringWithFormat:@"%lu-%lu",(unsigned long)[previousRecordDate year],(unsigned long)[previousRecordDate month]];;
+                }else if([previousRecordDate month] != [theDate month]){
+                    dateString = [NSString stringWithFormat:@"%lu",(unsigned long)[previousRecordDate month]];;
+                }
+            }else {
+                if ([previousRecordDate year] != [theDate year]) {
+                    dateString = [NSString stringWithFormat:@"%lu",(unsigned long)[previousRecordDate year]];;
+                }
+            }
+            if (dateString) {
+
+                CGFloat positionX = x + self.KWidth / 2 + self.KWidth + self.KInterSpace;
+                self.dateStringsAndPositon[dateString] = @(positionX);
+
+                // draw date line
+                [self.dateLine moveToPoint:CGPointMake(positionX , self.kLineAreaHeight)];
+                [self.dateLine addLineToPoint:CGPointMake(positionX, self.kLineAreaHeight - 5)];
+            }
         }
 
         x -= self.KInterSpace + self.KWidth;
@@ -248,8 +312,6 @@
     // draw K line and volumn
     CGFloat x = self.lastVisibleKLineX;
     NSInteger recordIndex = self.lastVisibleRecordIndex;
-
-    UIBezierPath* dateLine = [UIBezierPath bezierPath];
     while (x > -self.KWidth + CGRectGetMinX(self.dirtyRect)) {
         // only need to draw the dirty rect to save some time
         if (x > CGRectGetMaxX(self.dirtyRect)) {
@@ -299,48 +361,20 @@
             [crossLine stroke];
         }
 
-        // draw date
-        if (recordIndex > 0 && self.showDate) {
-            NSDate* previousRecordDate = ((TTKLineRecord*)self.records[recordIndex - 1]).date;
-            NSDate* theDate = record.date;
-            NSString* dateString = nil;
-            if ([self.kLineType isEqualToString:TTKlineTypeDay]){
-                if ([previousRecordDate month] != [theDate month] || [previousRecordDate year] != [theDate year]) {
-                    dateString = [NSString stringWithFormat:@"%lu-%lu",(unsigned long)[previousRecordDate year],(unsigned long)[previousRecordDate month]];;
-                }
-            }else if ([self.kLineType isEqualToString:TTKlineTypeWeek]){
-                if ([previousRecordDate year] != [theDate year]) {
-                    dateString = [NSString stringWithFormat:@"%lu-%lu",(unsigned long)[previousRecordDate year],(unsigned long)[previousRecordDate month]];;
-                }else if([previousRecordDate month] != [theDate month]){
-                    dateString = [NSString stringWithFormat:@"%lu",(unsigned long)[previousRecordDate month]];;
-                }
-            }else {
-                if ([previousRecordDate year] != [theDate year]) {
-                    dateString = [NSString stringWithFormat:@"%lu",(unsigned long)[previousRecordDate year]];;
-                }
-            }
-            if (dateString) {
-                //draw date string
-                [dateString drawWithRect:CGRectMake(x + self.KWidth / 2 + self.KWidth + self.KInterSpace - 50, self.kLineAreaHeight, 100, KlineAndVolumSpace) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSForegroundColorAttributeName:self.dateColor,NSParagraphStyleAttributeName : self.alignmentCenter } context:nil];
-
-                // draw date line
-                [dateLine moveToPoint:CGPointMake(x + self.KWidth / 2 + self.KWidth + self.KInterSpace , self.kLineAreaHeight)];
-                [dateLine addLineToPoint:CGPointMake(x + self.KWidth / 2 + self.KWidth + self.KInterSpace, self.kLineAreaHeight - 5)];
-            }
-        }
 
         x -= self.KInterSpace + self.KWidth;
         recordIndex += 1;
     }
 
     [[UIColor lightGrayColor] setStroke];
-    [dateLine stroke];
+    [self.dateLine stroke];
 
     NSLog(@" draw time :%.2fms",(CFAbsoluteTimeGetCurrent() - startTime) * 1000);
 }
 
 
 #pragma mark - Gestures;
+
 -(void)pinch:(UIPinchGestureRecognizer* )pinchGesture{
 
     if (!self.records.count) {
@@ -424,12 +458,12 @@
         self.focusedRecordIndex = -1;
     }
 
-    [self.delegate focusedRecord:self.focusedRecordIndex >= 0 ? self.records[self.focusedRecordIndex] : nil inRightHalfArea:locationX > CGRectGetMidX(self.bounds)];
-
     // because the cross line must be redrawn, so dirtyRect will the whole bounds
     self.dirtyRect = self.bounds;
     [self setNeedsDisplay];
-    
+
+    [self.delegate focusedRecord:self.focusedRecordIndex >= 0 ? self.records[self.focusedRecordIndex] : nil inRightHalfArea:locationX > CGRectGetMidX(self.bounds)];
+
 }
 
 
@@ -523,13 +557,10 @@
     _KInterSpace = 4.0;
     _lastVisibleKLineX = -5201314;
     _kLineType = TTKlineTypeDay;
-    _showDate = YES;
-
     _klineIncreaseColor = [UIColor redColor];
     _klineDecreaseColor = [UIColor greenColor];
     _klineNotChangeColor = [UIColor blackColor];
     _focusedCrossLineColor = [UIColor darkGrayColor];
-    _dateColor = [UIColor darkGrayColor];
 
     _alignmentCenter = [[NSMutableParagraphStyle alloc] init];
     _alignmentCenter.alignment = NSTextAlignmentCenter;
@@ -559,6 +590,12 @@
     self.ma20 = [UIBezierPath bezierPath];
     self.ma20.lineWidth = 0.5;
     self.ma20.lineJoinStyle = kCGLineJoinBevel;
+
+    //date line
+    self.dateLine = [UIBezierPath bezierPath];
+    self.dateLine.lineWidth = 0.5;
+    _dateStringsAndPositon = [@{} mutableCopy];
+
 
     // background view
     UIView* bkg = [[UIView alloc] initWithFrame:self.bounds];

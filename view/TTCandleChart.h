@@ -13,6 +13,7 @@
 -(void)focusedRecord:(TTKLineRecord*)focusedRecord inRightHalfArea:(BOOL)rightHalf;
 -(void)pricenRangeChangedWithMaxPrice:(float)max minPrice:(float)min;
 -(void)feedMoreDateCompletionHandler:(void(^)()) completionHandler;
+-(void)dateMeterChanged:(NSDictionary* )dateStringAndPointX;
 
 @end
 
@@ -22,8 +23,6 @@
 @property(strong, nonatomic) NSString* kLineType;
 
 @property(strong, nonatomic) NSArray* records; // the last object is the earlist k line data
-
-@property(nonatomic) BOOL showDate; //
 
 @property(weak,nonatomic)id <TTCandleChartDelegate> delegate;
 
