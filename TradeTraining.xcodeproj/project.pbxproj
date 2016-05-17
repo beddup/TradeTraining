@@ -1,0 +1,444 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		8D13B48C1CB512E300951C55 /* TTKLineChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D13B48B1CB512E300951C55 /* TTKLineChart.m */; settings = {ASSET_TAGS = (); }; };
+		8D51D4511CB7709200296981 /* TTKLineTrainingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D51D4501CB7709200296981 /* TTKLineTrainingViewController.m */; settings = {ASSET_TAGS = (); }; };
+		8D61B17A1CAC302B0033C237 /* TTStockSearchResultTVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D61B1791CAC302B0033C237 /* TTStockSearchResultTVC.m */; settings = {ASSET_TAGS = (); }; };
+		8D61B17C1CAC3A7C0033C237 /* TTStockSearchResultTVCHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D61B17B1CAC3A7C0033C237 /* TTStockSearchResultTVCHeaderView.xib */; settings = {ASSET_TAGS = (); }; };
+		8D61B1821CAD5AF20033C237 /* TTTrainingKLineChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D61B1811CAD5AF20033C237 /* TTTrainingKLineChart.m */; settings = {ASSET_TAGS = (); }; };
+		8D7AC3151CB01038003A6805 /* TTRecordInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8D7AC3141CB01038003A6805 /* TTRecordInfoView.m */; settings = {ASSET_TAGS = (); }; };
+		8D7AC3171CB015A5003A6805 /* TTRecordInfoView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8D7AC3161CB015A5003A6805 /* TTRecordInfoView.xib */; settings = {ASSET_TAGS = (); }; };
+		8DCCC2141C9BAFBE002A8579 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DCCC2131C9BAFBE002A8579 /* main.m */; };
+		8DCCC2171C9BAFBE002A8579 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DCCC2161C9BAFBE002A8579 /* AppDelegate.m */; };
+		8DCCC21A1C9BAFBE002A8579 /* TTKLineChartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DCCC2191C9BAFBE002A8579 /* TTKLineChartViewController.m */; };
+		8DCCC21D1C9BAFBE002A8579 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DCCC21B1C9BAFBE002A8579 /* Main.storyboard */; };
+		8DCCC21F1C9BAFBE002A8579 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8DCCC21E1C9BAFBE002A8579 /* Assets.xcassets */; };
+		8DCCC2221C9BAFBE002A8579 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8DCCC2201C9BAFBE002A8579 /* LaunchScreen.storyboard */; };
+		8DCCC22B1C9BB0AE002A8579 /* TTStockMarketDataProvider.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DCCC22A1C9BB0AE002A8579 /* TTStockMarketDataProvider.m */; settings = {ASSET_TAGS = (); }; };
+		8DCCC2331C9BB20F002A8579 /* TTKLineRecord.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DCCC2321C9BB20F002A8579 /* TTKLineRecord.m */; settings = {ASSET_TAGS = (); }; };
+		8DCCC23C1C9C5E40002A8579 /* NSDate+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DCCC23B1C9C5E40002A8579 /* NSDate+Extension.m */; settings = {ASSET_TAGS = (); }; };
+		8DCCC24D1C9DB4BF002A8579 /* TTStockCode.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8DCCC24B1C9DB4BF002A8579 /* TTStockCode.xcdatamodeld */; settings = {ASSET_TAGS = (); }; };
+		8DCCC2521C9DB51E002A8579 /* StockCode+CoreDataProperties.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DCCC24F1C9DB51E002A8579 /* StockCode+CoreDataProperties.m */; settings = {ASSET_TAGS = (); }; };
+		8DCCC2531C9DB51E002A8579 /* StockCode.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DCCC2511C9DB51E002A8579 /* StockCode.m */; settings = {ASSET_TAGS = (); }; };
+		8DCCC27C1C9DB989002A8579 /* TTStockCodeHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DCCC27B1C9DB989002A8579 /* TTStockCodeHelper.m */; settings = {ASSET_TAGS = (); }; };
+		8DCCC2841C9E3A59002A8579 /* stockcode.csv in Resources */ = {isa = PBXBuildFile; fileRef = 8DCCC2831C9E3A59002A8579 /* stockcode.csv */; settings = {ASSET_TAGS = (); }; };
+		8DDA0BAB1C9EC07D00B1840F /* TTKLineRecordsManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DDA0BAA1C9EC07D00B1840F /* TTKLineRecordsManager.m */; settings = {ASSET_TAGS = (); }; };
+		8DDA0BAE1C9F974B00B1840F /* TTCandleChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DDA0BAD1C9F974B00B1840F /* TTCandleChart.m */; settings = {ASSET_TAGS = (); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		8D13B48A1CB512E300951C55 /* TTKLineChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTKLineChart.h; path = view/TTKLineChart.h; sourceTree = "<group>"; };
+		8D13B48B1CB512E300951C55 /* TTKLineChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTKLineChart.m; path = view/TTKLineChart.m; sourceTree = "<group>"; };
+		8D51D44F1CB7709200296981 /* TTKLineTrainingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTKLineTrainingViewController.h; path = Controller/TTKLineTrainingViewController.h; sourceTree = "<group>"; };
+		8D51D4501CB7709200296981 /* TTKLineTrainingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTKLineTrainingViewController.m; path = Controller/TTKLineTrainingViewController.m; sourceTree = "<group>"; };
+		8D61B1781CAC302B0033C237 /* TTStockSearchResultTVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTStockSearchResultTVC.h; path = Controller/TTStockSearchResultTVC.h; sourceTree = "<group>"; };
+		8D61B1791CAC302B0033C237 /* TTStockSearchResultTVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTStockSearchResultTVC.m; path = Controller/TTStockSearchResultTVC.m; sourceTree = "<group>"; };
+		8D61B17B1CAC3A7C0033C237 /* TTStockSearchResultTVCHeaderView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TTStockSearchResultTVCHeaderView.xib; path = Controller/TTStockSearchResultTVCHeaderView.xib; sourceTree = "<group>"; };
+		8D61B1801CAD5AF20033C237 /* TTTrainingKLineChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTTrainingKLineChart.h; path = view/TTTrainingKLineChart.h; sourceTree = "<group>"; };
+		8D61B1811CAD5AF20033C237 /* TTTrainingKLineChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTTrainingKLineChart.m; path = view/TTTrainingKLineChart.m; sourceTree = "<group>"; };
+		8D7AC3131CB01038003A6805 /* TTRecordInfoView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTRecordInfoView.h; path = view/TTRecordInfoView.h; sourceTree = "<group>"; };
+		8D7AC3141CB01038003A6805 /* TTRecordInfoView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTRecordInfoView.m; path = view/TTRecordInfoView.m; sourceTree = "<group>"; };
+		8D7AC3161CB015A5003A6805 /* TTRecordInfoView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = TTRecordInfoView.xib; path = view/TTRecordInfoView.xib; sourceTree = "<group>"; };
+		8DCCC20F1C9BAFBE002A8579 /* TradeTraining.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TradeTraining.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8DCCC2131C9BAFBE002A8579 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		8DCCC2151C9BAFBE002A8579 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		8DCCC2161C9BAFBE002A8579 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		8DCCC2181C9BAFBE002A8579 /* TTKLineChartViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTKLineChartViewController.h; sourceTree = "<group>"; };
+		8DCCC2191C9BAFBE002A8579 /* TTKLineChartViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TTKLineChartViewController.m; sourceTree = "<group>"; };
+		8DCCC21C1C9BAFBE002A8579 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		8DCCC21E1C9BAFBE002A8579 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8DCCC2211C9BAFBE002A8579 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8DCCC2231C9BAFBE002A8579 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8DCCC2291C9BB0AE002A8579 /* TTStockMarketDataProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTStockMarketDataProvider.h; path = model/TTStockMarketDataProvider.h; sourceTree = "<group>"; };
+		8DCCC22A1C9BB0AE002A8579 /* TTStockMarketDataProvider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTStockMarketDataProvider.m; path = model/TTStockMarketDataProvider.m; sourceTree = "<group>"; };
+		8DCCC2311C9BB20F002A8579 /* TTKLineRecord.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTKLineRecord.h; path = model/TTKLineRecord.h; sourceTree = "<group>"; };
+		8DCCC2321C9BB20F002A8579 /* TTKLineRecord.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTKLineRecord.m; path = model/TTKLineRecord.m; sourceTree = "<group>"; };
+		8DCCC23A1C9C5E3F002A8579 /* NSDate+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Extension.h"; sourceTree = "<group>"; };
+		8DCCC23B1C9C5E40002A8579 /* NSDate+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Extension.m"; sourceTree = "<group>"; };
+		8DCCC2401C9CFCC5002A8579 /* TTDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TTDefines.h; sourceTree = "<group>"; };
+		8DCCC24C1C9DB4BF002A8579 /* TTStockCode.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = TTStockCode.xcdatamodel; sourceTree = "<group>"; };
+		8DCCC24E1C9DB51E002A8579 /* StockCode+CoreDataProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "StockCode+CoreDataProperties.h"; path = "model/StockCode+CoreDataProperties.h"; sourceTree = "<group>"; };
+		8DCCC24F1C9DB51E002A8579 /* StockCode+CoreDataProperties.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "StockCode+CoreDataProperties.m"; path = "model/StockCode+CoreDataProperties.m"; sourceTree = "<group>"; };
+		8DCCC2501C9DB51E002A8579 /* StockCode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StockCode.h; path = model/StockCode.h; sourceTree = "<group>"; };
+		8DCCC2511C9DB51E002A8579 /* StockCode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StockCode.m; path = model/StockCode.m; sourceTree = "<group>"; };
+		8DCCC27A1C9DB989002A8579 /* TTStockCodeHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTStockCodeHelper.h; path = model/TTStockCodeHelper.h; sourceTree = "<group>"; };
+		8DCCC27B1C9DB989002A8579 /* TTStockCodeHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTStockCodeHelper.m; path = model/TTStockCodeHelper.m; sourceTree = "<group>"; };
+		8DCCC2831C9E3A59002A8579 /* stockcode.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = stockcode.csv; sourceTree = "<group>"; };
+		8DDA0BA91C9EC07D00B1840F /* TTKLineRecordsManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTKLineRecordsManager.h; path = model/TTKLineRecordsManager.h; sourceTree = "<group>"; };
+		8DDA0BAA1C9EC07D00B1840F /* TTKLineRecordsManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTKLineRecordsManager.m; path = model/TTKLineRecordsManager.m; sourceTree = "<group>"; };
+		8DDA0BAC1C9F974B00B1840F /* TTCandleChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TTCandleChart.h; path = view/TTCandleChart.h; sourceTree = "<group>"; };
+		8DDA0BAD1C9F974B00B1840F /* TTCandleChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TTCandleChart.m; path = view/TTCandleChart.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		8DCCC20C1C9BAFBE002A8579 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		8D10A6EC1FE7BB41E183FB55 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8DCCC2061C9BAFBE002A8579 = {
+			isa = PBXGroup;
+			children = (
+				8DCCC2111C9BAFBE002A8579 /* TradeTraining */,
+				8DCCC2101C9BAFBE002A8579 /* Products */,
+				8D10A6EC1FE7BB41E183FB55 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		8DCCC2101C9BAFBE002A8579 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				8DCCC20F1C9BAFBE002A8579 /* TradeTraining.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		8DCCC2111C9BAFBE002A8579 /* TradeTraining */ = {
+			isa = PBXGroup;
+			children = (
+				8DCCC2151C9BAFBE002A8579 /* AppDelegate.h */,
+				8DCCC2161C9BAFBE002A8579 /* AppDelegate.m */,
+				8DCCC2181C9BAFBE002A8579 /* TTKLineChartViewController.h */,
+				8DCCC2191C9BAFBE002A8579 /* TTKLineChartViewController.m */,
+				8D51D44F1CB7709200296981 /* TTKLineTrainingViewController.h */,
+				8D51D4501CB7709200296981 /* TTKLineTrainingViewController.m */,
+				8D61B1781CAC302B0033C237 /* TTStockSearchResultTVC.h */,
+				8D61B1791CAC302B0033C237 /* TTStockSearchResultTVC.m */,
+				8D61B17B1CAC3A7C0033C237 /* TTStockSearchResultTVCHeaderView.xib */,
+				8DCCC2301C9BB101002A8579 /* view */,
+				8DCCC22C1C9BB0BB002A8579 /* model */,
+				8DCCC21B1C9BAFBE002A8579 /* Main.storyboard */,
+				8DCCC21E1C9BAFBE002A8579 /* Assets.xcassets */,
+				8DCCC2201C9BAFBE002A8579 /* LaunchScreen.storyboard */,
+				8DCCC2231C9BAFBE002A8579 /* Info.plist */,
+				8DCCC2121C9BAFBE002A8579 /* Supporting Files */,
+			);
+			path = TradeTraining;
+			sourceTree = "<group>";
+		};
+		8DCCC2121C9BAFBE002A8579 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				8DCCC2131C9BAFBE002A8579 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		8DCCC22C1C9BB0BB002A8579 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				8DCCC2401C9CFCC5002A8579 /* TTDefines.h */,
+				8DCCC23A1C9C5E3F002A8579 /* NSDate+Extension.h */,
+				8DCCC23B1C9C5E40002A8579 /* NSDate+Extension.m */,
+				8DCCC2311C9BB20F002A8579 /* TTKLineRecord.h */,
+				8DCCC2321C9BB20F002A8579 /* TTKLineRecord.m */,
+				8DDA0BA91C9EC07D00B1840F /* TTKLineRecordsManager.h */,
+				8DDA0BAA1C9EC07D00B1840F /* TTKLineRecordsManager.m */,
+				8DCCC2291C9BB0AE002A8579 /* TTStockMarketDataProvider.h */,
+				8DCCC22A1C9BB0AE002A8579 /* TTStockMarketDataProvider.m */,
+				8DCCC24E1C9DB51E002A8579 /* StockCode+CoreDataProperties.h */,
+				8DCCC24F1C9DB51E002A8579 /* StockCode+CoreDataProperties.m */,
+				8DCCC2501C9DB51E002A8579 /* StockCode.h */,
+				8DCCC2511C9DB51E002A8579 /* StockCode.m */,
+				8DCCC27A1C9DB989002A8579 /* TTStockCodeHelper.h */,
+				8DCCC27B1C9DB989002A8579 /* TTStockCodeHelper.m */,
+				8DCCC2831C9E3A59002A8579 /* stockcode.csv */,
+				8DCCC24B1C9DB4BF002A8579 /* TTStockCode.xcdatamodeld */,
+			);
+			name = model;
+			sourceTree = "<group>";
+		};
+		8DCCC2301C9BB101002A8579 /* view */ = {
+			isa = PBXGroup;
+			children = (
+				8D13B48A1CB512E300951C55 /* TTKLineChart.h */,
+				8D13B48B1CB512E300951C55 /* TTKLineChart.m */,
+				8DDA0BAC1C9F974B00B1840F /* TTCandleChart.h */,
+				8DDA0BAD1C9F974B00B1840F /* TTCandleChart.m */,
+				8D61B1801CAD5AF20033C237 /* TTTrainingKLineChart.h */,
+				8D61B1811CAD5AF20033C237 /* TTTrainingKLineChart.m */,
+				8D7AC3131CB01038003A6805 /* TTRecordInfoView.h */,
+				8D7AC3141CB01038003A6805 /* TTRecordInfoView.m */,
+				8D7AC3161CB015A5003A6805 /* TTRecordInfoView.xib */,
+			);
+			name = view;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		8DCCC20E1C9BAFBE002A8579 /* TradeTraining */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8DCCC2261C9BAFBE002A8579 /* Build configuration list for PBXNativeTarget "TradeTraining" */;
+			buildPhases = (
+				8DCCC20B1C9BAFBE002A8579 /* Sources */,
+				8DCCC20C1C9BAFBE002A8579 /* Frameworks */,
+				8DCCC20D1C9BAFBE002A8579 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TradeTraining;
+			productName = TradeTraining;
+			productReference = 8DCCC20F1C9BAFBE002A8579 /* TradeTraining.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		8DCCC2071C9BAFBE002A8579 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = Beddup;
+				TargetAttributes = {
+					8DCCC20E1C9BAFBE002A8579 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+				};
+			};
+			buildConfigurationList = 8DCCC20A1C9BAFBE002A8579 /* Build configuration list for PBXProject "TradeTraining" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 8DCCC2061C9BAFBE002A8579;
+			productRefGroup = 8DCCC2101C9BAFBE002A8579 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				8DCCC20E1C9BAFBE002A8579 /* TradeTraining */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		8DCCC20D1C9BAFBE002A8579 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8DCCC2221C9BAFBE002A8579 /* LaunchScreen.storyboard in Resources */,
+				8D61B17C1CAC3A7C0033C237 /* TTStockSearchResultTVCHeaderView.xib in Resources */,
+				8DCCC21F1C9BAFBE002A8579 /* Assets.xcassets in Resources */,
+				8DCCC21D1C9BAFBE002A8579 /* Main.storyboard in Resources */,
+				8D7AC3171CB015A5003A6805 /* TTRecordInfoView.xib in Resources */,
+				8DCCC2841C9E3A59002A8579 /* stockcode.csv in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8DCCC20B1C9BAFBE002A8579 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8DDA0BAE1C9F974B00B1840F /* TTCandleChart.m in Sources */,
+				8D61B17A1CAC302B0033C237 /* TTStockSearchResultTVC.m in Sources */,
+				8DCCC21A1C9BAFBE002A8579 /* TTKLineChartViewController.m in Sources */,
+				8D61B1821CAD5AF20033C237 /* TTTrainingKLineChart.m in Sources */,
+				8D51D4511CB7709200296981 /* TTKLineTrainingViewController.m in Sources */,
+				8D7AC3151CB01038003A6805 /* TTRecordInfoView.m in Sources */,
+				8DCCC2521C9DB51E002A8579 /* StockCode+CoreDataProperties.m in Sources */,
+				8DCCC2531C9DB51E002A8579 /* StockCode.m in Sources */,
+				8DCCC22B1C9BB0AE002A8579 /* TTStockMarketDataProvider.m in Sources */,
+				8DCCC24D1C9DB4BF002A8579 /* TTStockCode.xcdatamodeld in Sources */,
+				8DCCC27C1C9DB989002A8579 /* TTStockCodeHelper.m in Sources */,
+				8DDA0BAB1C9EC07D00B1840F /* TTKLineRecordsManager.m in Sources */,
+				8D13B48C1CB512E300951C55 /* TTKLineChart.m in Sources */,
+				8DCCC2331C9BB20F002A8579 /* TTKLineRecord.m in Sources */,
+				8DCCC23C1C9C5E40002A8579 /* NSDate+Extension.m in Sources */,
+				8DCCC2171C9BAFBE002A8579 /* AppDelegate.m in Sources */,
+				8DCCC2141C9BAFBE002A8579 /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		8DCCC21B1C9BAFBE002A8579 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8DCCC21C1C9BAFBE002A8579 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		8DCCC2201C9BAFBE002A8579 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8DCCC2211C9BAFBE002A8579 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		8DCCC2241C9BAFBE002A8579 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8DCCC2251C9BAFBE002A8579 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		8DCCC2271C9BAFBE002A8579 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = TradeTraining/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = Beddup.TradeTraining;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		8DCCC2281C9BAFBE002A8579 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				INFOPLIST_FILE = TradeTraining/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = Beddup.TradeTraining;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		8DCCC20A1C9BAFBE002A8579 /* Build configuration list for PBXProject "TradeTraining" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8DCCC2241C9BAFBE002A8579 /* Debug */,
+				8DCCC2251C9BAFBE002A8579 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8DCCC2261C9BAFBE002A8579 /* Build configuration list for PBXNativeTarget "TradeTraining" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8DCCC2271C9BAFBE002A8579 /* Debug */,
+				8DCCC2281C9BAFBE002A8579 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		8DCCC24B1C9DB4BF002A8579 /* TTStockCode.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				8DCCC24C1C9DB4BF002A8579 /* TTStockCode.xcdatamodel */,
+			);
+			currentVersion = 8DCCC24C1C9DB4BF002A8579 /* TTStockCode.xcdatamodel */;
+			name = TTStockCode.xcdatamodeld;
+			path = model/TTStockCode.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 8DCCC2071C9BAFBE002A8579 /* Project object */;
+}

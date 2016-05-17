@@ -1,0 +1,35 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "CBA5CA8FB7B7D7F31915751692D9A4EA5CDA756D",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "CBA5CA8FB7B7D7F31915751692D9A4EA5CDA756D" : 0,
+    "142D7E97BA72D581EF50926A5606F78F6195A865" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "9E8DB185-764C-45E4-85ED-72C92223BDFA",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "CBA5CA8FB7B7D7F31915751692D9A4EA5CDA756D" : "TradeTraining\/TradeTraining\/",
+    "142D7E97BA72D581EF50926A5606F78F6195A865" : ""
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "TradeTraining",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "TradeTraining.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/beddup\/TradeTraining",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "142D7E97BA72D581EF50926A5606F78F6195A865"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/beddup\/TradeTraining",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "CBA5CA8FB7B7D7F31915751692D9A4EA5CDA756D"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/beddup\/TradeTraining.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "CBA5CA8FB7B7D7F31915751692D9A4EA5CDA756D"
+    }
+  ]
+}
