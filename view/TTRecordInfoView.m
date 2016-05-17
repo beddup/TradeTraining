@@ -73,6 +73,7 @@
 
 #pragma  mark - setup
 -(void)awakeFromNib{
+    [super awakeFromNib];
     [self setup];
 }
 
@@ -88,7 +89,6 @@
 
     self.dateFormatter  = [[NSDateFormatter alloc] init];
     [self.dateFormatter setDateFormat:@"yyyy-MM-dd"];
-
 
 }
 -(instancetype)initWithFrame:(CGRect)frame{

@@ -11,7 +11,8 @@
 @class StockCode;
 @interface TTStockCodeHelper : NSObject
 
-+(void)updateStockCode;
+//+(void)updateStockCode;
++(void)loadStockCode;
 
 +(NSArray* )searchStock:(NSString*)keyword;
 

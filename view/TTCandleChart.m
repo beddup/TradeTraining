@@ -75,6 +75,7 @@
         _lastVisibleKLineX = lastVisibleKLineX;
         [self calculateMaxPriceAndMaxVolumn];
         if (self.records.count) {
+//            [self setNeedsDisplay];
             self.needResetBkgView ? [self setNeedsDisplay]:[self setNeedsDisplayInRect:self.dirtyRect];
         }
     }
@@ -148,6 +149,7 @@
     CGFloat maxVolumn = 0;
     while ( x > - self.KWidth  ) {
         if (recordIndex >= self.records.count) {
+            self.needMoreDate = YES;
             break;
         }
         TTKLineRecord * record = self.records[recordIndex];
@@ -494,7 +496,7 @@
     UIImage* image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
 
-    self.bkgView.frame = self.bounds;
+    self.bkgView.center = CGPointMake(CGRectGetMidX(self.bounds), CGRectGetMidY(self.bounds));
     self.bkgView.layer.contents = (__bridge id _Nullable)(image.CGImage);
     self.bkgView.hidden = NO;
 
@@ -603,6 +605,7 @@
     bkg.backgroundColor = [UIColor whiteColor];
     self.bkgView = bkg;
     self.bkgView.hidden = YES;
+    bkg.opaque = YES;
 
     self.dirtyRect = self.bounds;
 

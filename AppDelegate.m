@@ -8,7 +8,6 @@
 
 #import "AppDelegate.h"
 #import "TTDefines.h"
-#import <BmobSDK/Bmob.h>
 #import "TTStockCodeHelper.h"
 @interface AppDelegate ()
 
@@ -20,8 +19,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
 
-    [Bmob registerWithAppKey:TTBmobApplicationID];
-    [TTStockCodeHelper updateStockCode];
+//    [Bmob registerWithAppKey:TTBmobApplicationID];
+    [TTStockCodeHelper loadStockCode];
 
     return YES;
 }

@@ -7,7 +7,6 @@
 //
 
 #import "TTStockMarketDataProvider.h"
-#import "AFNetWorking.h"
 #import "NSDate+Extension.h"
 #import "TTKLineRecord.h"
 @interface TTStockMarketDataProvider()

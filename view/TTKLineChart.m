@@ -71,7 +71,7 @@ static CGFloat MADisplayZoneHeight = 25;
 -(void)focusedRecord:(TTKLineRecord *)focusedRecord inRightHalfArea:(BOOL)rightHalf{
     // update the ma display label and adjust recordInfoView frame
     if (focusedRecord) {
-        
+
         self.recordInfoView.record = focusedRecord;
 
         // update ma display info and focused record info
@@ -81,8 +81,7 @@ static CGFloat MADisplayZoneHeight = 25;
         [self.maDisplayLabel setAttributedText:maString];
 
         // frame
-        self.recordInfoView.center = rightHalf ? CGPointMake(RecordInfoDisplayWidth / 2, RecordInfoDisplayHeight / 2) : CGPointMake(CGRectGetWidth(self.bounds) - RecordInfoDisplayWidth / 2, RecordInfoDisplayHeight / 2);
-        NSLog(@"frame after:%@",NSStringFromCGRect(self.recordInfoView.frame));
+        self.recordInfoView.frame = rightHalf ? CGRectMake(0, MADisplayZoneHeight, RecordInfoDisplayWidth, RecordInfoDisplayHeight):CGRectMake(CGRectGetWidth(self.bounds) - RecordInfoDisplayWidth, MADisplayZoneHeight, RecordInfoDisplayWidth, RecordInfoDisplayHeight);
         self.recordInfoView.hidden = NO;
 
     }else{
@@ -159,7 +158,7 @@ static CGFloat MADisplayZoneHeight = 25;
                           dispatch_async(dispatch_get_main_queue(), ^{
 
                               if ([self.kLineType isEqualToString:kType]) {
-                                  // during the data fetching, user may change the k type. in such situation, the returned record should be discarded 
+                                  // during the data fetching, user may change the k type. in such situation, the returned record should be discarded
                                   if (completionHandler) {
                                       completionHandler();
                                   }
@@ -180,7 +179,7 @@ static CGFloat MADisplayZoneHeight = 25;
         UILabel* label = self.priceLabels[index];
         label.frame = CGRectMake(0, KlineAreaHeightRatio * CGRectGetHeight(self.bounds) / AxisPriceZoneCount * (index + 1) - 15, 60, 15);
     }
-    
+
 }
 -(void)awakeFromNib{
     [self setup];
@@ -190,8 +189,6 @@ static CGFloat MADisplayZoneHeight = 25;
 -(void)setup{
 
     _kLineType = TTKlineTypeDay;
-
-    [self setTranslatesAutoresizingMaskIntoConstraints:NO];
 
     self.layer.borderWidth = 0.5;
     self.layer.borderColor = [UIColor lightGrayColor].CGColor;
@@ -226,13 +223,14 @@ static CGFloat MADisplayZoneHeight = 25;
 
     //focused record info
     TTRecordInfoView* view = [[[NSBundle mainBundle] loadNibNamed:@"TTRecordInfoView" owner:nil options:nil] lastObject];
-    view.bounds = CGRectMake(0,0, RecordInfoDisplayWidth, RecordInfoDisplayHeight);
+    view.frame = CGRectMake(0,25, RecordInfoDisplayWidth, RecordInfoDisplayHeight);
     [self addSubview:view];
     view.hidden = YES;
     self.recordInfoView = view;
 
     self.showDate = YES;
-
+    
+    
 }
 -(instancetype)initWithFrame:(CGRect)frame{
     self=[super initWithFrame:frame];
